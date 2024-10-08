@@ -15,6 +15,7 @@
 
 .App-header {
   background-color: #282c34;
+  font-family: 'Roboto', sans-serif;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -38,6 +39,7 @@
 }
 .App-header {
   background-color: #32a852;
+  font-family: 'Roboto', sans-serif;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
