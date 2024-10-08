@@ -6,7 +6,6 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can add logic here to authenticate the user
     console.log(`Email: ${email}, Password: ${password}`);
   };
 
@@ -15,7 +14,7 @@ function Login() {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Email:</label>
+          <label>Email: </label>
           <input
             type="email"
             value={email}
@@ -24,7 +23,7 @@ function Login() {
           />
         </div>
         <div>
-          <label>Password:</label>
+          <label>Password: </label>
           <input
             type="password"
             value={password}

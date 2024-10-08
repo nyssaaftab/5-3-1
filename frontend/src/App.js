@@ -2,19 +2,30 @@ import logo from './road.webp';
 import star from './5star.webp';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import React from 'react'; 
+import React, { useState } from 'react'; 
 import { Link } from 'react-router-dom';
 import Login from './Login';
 
 
 function App() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <Router>
       <div className="App">
         <header className="App-header">
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/login" style={{ marginLeft: '20px' }}>Login</Link>
+          <nav className="navbar">
+            <div className="menu-icon" onClick={toggleMenu}>
+              &#9776;
+            </div>
+            <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
+              <li><Link to="/" onClick={toggleMenu}>Home</Link></li>
+              <li><Link to="/login" onClick={toggleMenu}>Login</Link></li>
+            </ul>
           </nav>
           <Routes>
             <Route

@@ -47,3 +47,64 @@
   justify-content: center;
   color: white;
 }
+
+.login form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: auto;
+}
+
+.login input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login button {
+  padding: 10px;
+  /*background-color: #32a852;
+  color: white;*/
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  width: auto;
+  margin: 0 auto;
+}
+
+.navbar {
+  background-color: #32a852;
+  padding: 10px;
+}
+
+.menu-icon {
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+  position: absolute;
+  top: 15px;
+  left: 20px;
+}
+
+.nav-links {
+  list-style-type: none;
+  padding: 0;
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: 10px;
+}
+
+.nav-links.open {
+  display: block;
+}
+
+.nav-links li {
+  margin: 10px 0;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
