@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import React, { useState } from 'react'; 
 import { Link } from 'react-router-dom';
 import Login from './Login';
+import Restaurants from './Restaurants';
+import AboutUs from './AboutUs';
 
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
             <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
               <li><Link to="/" onClick={toggleMenu}>Home</Link></li>
               <li><Link to="/login" onClick={toggleMenu}>Login</Link></li>
+              <li><Link to="/restaurants"onClick={toggleMenu}>Restaurants</Link></li>
+              <li><Link to="/about-us"onClick={toggleMenu}>About Us</Link></li>
             </ul>
           </nav>
           <Routes>
@@ -40,6 +44,9 @@ function App() {
               }
             />
             <Route path="/login" element={<Login />} />
+            <Route path="/restaurants" element={<Restaurants />} /> 
+            <Route path="/about-us" element={<AboutUs />} />
+
           </Routes>
         </header>
       </div>
