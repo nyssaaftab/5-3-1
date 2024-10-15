@@ -10,4 +10,14 @@ class FivethreeoneApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+    void testRestTemplateBean() {
+        // Retrieve the RestTemplate bean from the application context
+        RestTemplate restTemplate = applicationContext.getBean(RestTemplate.class);
+        
+        // Assert that the bean is not null and is an instance of RestTemplate
+        assertThat(restTemplate).isNotNull();
+        assertThat(restTemplate).isInstanceOf(RestTemplate.class);
+    }
+
 }
