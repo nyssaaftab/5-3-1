@@ -1,11 +1,14 @@
 package com.cs222.fivethreeone;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.context.ApplicationContext;
 
 @SpringBootTest
 class FivethreeoneApplicationTests {
-
+    private ApplicationContext applicationContext;
 	@Test
 	void contextLoads() {
 	}
