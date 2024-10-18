@@ -35,4 +35,24 @@ public class GooglePlacesService {
         return objectMapper.convertValue(results, new TypeReference<List<Restaurant>>() {});
     }
 
+    public List<Restaurant> getRandomPlaces(String location, String radius, int numRestaurants) throws JsonMappingException, JsonProcessingException {
+        String url = String.format(
+            "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%s&key=%s",
+            location, radius, apiKey);
+        String response = restTemplate.getForObject(url, String.class); //returns raw JSON response
+        JsonNode root = objectMapper.readTree(response);
+        JsonNode results = root.path("results");
+
+
+        List<Restaurant> restaurants = objectMapper.convertValue(results, new TypeReference<List<Restaurant>>() {});
+        Collections.shuffle(restaurants);
+
+        if (restaurants.size() > numRestaurants) {
+            return restaurants.subList(0, 5);
+        } else {
+            return restaurants;
+        }
+
+    }
+
 }
