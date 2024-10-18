@@ -41,5 +41,24 @@ public class GooglePlacesControllerTest {
             .andExpect(jsonPath("$").isEmpty());
     }
 
+    @Testpublic void testGetNearbyRestaurantsSuccess() throws Exception {
+        List<Restaurant> restaurants = Arrays.asList(
+            new Restaurant("Taco Bell", "500m", "321 Green St"),
+            new Restaurant("Canes", "1200m", "658 E Healey St")
+        );
+        when(googlePlacesService.getPlaces(anyString(), anyString())).thenReturn(restaurants);
+        mockMvc.perform(get("/api/places")
+                .param("location", "40.730610,-73.935242")
+                .param("radius", "1500"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].name").value("Taco Bell"))
+                .andExpect(jsonPath("$[0].distance").value("500m"))
+                .andExpect(jsonPath("$[0].address").value("321 Green St"))
+                .andExpect(jsonPath("$[1].name").value("Canes"))
+                .andExpect(jsonPath("$[1].distance").value("1200m"))
+                .andExpect(jsonPath("$[1].address").value("658 E Healey St"));
+    }
+
     
 }
