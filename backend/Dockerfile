@@ -13,5 +13,7 @@ CMD ["java", "-jar", "app.jar"]
 
 # docker stop 3e56942ba023
 
+
 # ./mvnw clean package -DskipTests
 # docker build -t backend-springboot .
+# docker run -d -p 8080:8080 backend-springboot
