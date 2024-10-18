@@ -16,4 +16,4 @@ CMD ["java", "-jar", "app.jar"]
 
 # ./mvnw clean package -DskipTests
 # docker build -t backend-springboot .
-# docker run -d -p 8080:8080 backend-springboot
+# docker run -d -p 8081:8080 backend-springboot
