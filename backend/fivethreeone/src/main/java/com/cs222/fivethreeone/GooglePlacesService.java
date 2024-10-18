@@ -4,22 +4,35 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.List;
+
 @Service
 public class GooglePlacesService {
-    @Value("${google.places.api.key}")
+    @Value("${GOOGLE_API_KEY}") //inject API key
     private String apiKey;
-
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    
 
     public GooglePlacesService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public String getPlaces(String location, String radius) {
+    public List<Restaurant> getPlaces(String location, String radius) throws JsonMappingException, JsonProcessingException {
         String url = String.format(
             "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%s&key=%s",
             location, radius, apiKey);
-        return restTemplate.getForObject(url, String.class);
+        String response = restTemplate.getForObject(url, String.class); //returns raw JSON response
+        JsonNode root = objectMapper.readTree(response);
+        JsonNode results = root.path("results");
+
+        return objectMapper.convertValue(results, new TypeReference<List<Restaurant>>() {});
     }
 
 }

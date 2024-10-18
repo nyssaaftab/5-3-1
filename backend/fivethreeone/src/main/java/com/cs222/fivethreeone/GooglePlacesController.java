@@ -3,16 +3,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
+import java.util.List;
+
+
 @RestController
 public class GooglePlacesController {
-    private final GooglePlacesService placesService;
+    private final GooglePlacesService googlePlacesService;
 
-    public GooglePlacesController(GooglePlacesService placesService) {
-        this.placesService = placesService;
+    public GooglePlacesController(GooglePlacesService googlePlacesService) {
+        this.googlePlacesService = googlePlacesService;
     }
 
     @GetMapping("/api/places")
-    public String getPlaces(@RequestParam String location, @RequestParam String radius) {
-        return placesService.getPlaces(location, radius);
+    public List<Restaurant> getPlaces(@RequestParam String location, @RequestParam String radius) throws JsonMappingException, JsonProcessingException {
+        return googlePlacesService.getPlaces(location, radius);
     }
 }
