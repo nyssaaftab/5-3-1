@@ -31,6 +31,10 @@
   opacity: 1; /* Show overlay on hover */
 }
 
+.restaurant-container {
+  margin-top: 125px;
+}
+
 .restaurant-list {
   display: flex;
   flex-wrap: wrap; 

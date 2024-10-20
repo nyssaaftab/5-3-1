@@ -17,13 +17,14 @@ const restaurants = [
 
 function Restaurants() {
   return (
-    <h1> Restaurants
-    <div className="restaurant-list">
-      {restaurants.map((restaurant) => (
-        <RestaurantCard key={restaurant.id} restaurant={restaurant} />
-      ))}
+    <div className="restaurant-container">
+      <h1>Restaurants</h1>
+      <div className="restaurant-list">
+        {restaurants.map((restaurant) => (
+          <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+        ))}
+      </div>
     </div>
-    </h1>
   );
 }
 

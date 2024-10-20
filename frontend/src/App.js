@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import Login from './Login';
 import Restaurants from './Restaurants';
 import AboutUs from './AboutUs';
+import Start from './Start';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
             </div>
             <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
               <li><Link to="/" onClick={toggleMenu}>Home</Link></li>
+              <li><Link to="/start" onClick={toggleMenu}>Start</Link></li>
               <li><Link to="/login" onClick={toggleMenu}>Login</Link></li>
               <li><Link to="/restaurants"onClick={toggleMenu}>Restaurants</Link></li>
               <li><Link to="/about-us"onClick={toggleMenu}>About Us</Link></li>
@@ -43,6 +45,7 @@ function App() {
                 </div>
               }
             />
+            <Route path="/start" element={<Start />} />
             <Route path="/login" element={<Login />} />
             <Route path="/restaurants" element={<Restaurants />} /> 
             <Route path="/about-us" element={<AboutUs />} />
