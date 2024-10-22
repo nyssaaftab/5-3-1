@@ -6,7 +6,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
+
 import java.util.List;
+import java.util.Random;
 
 
 @RestController
@@ -26,4 +31,23 @@ public class GooglePlacesController {
     public List<Restaurant> getRandomPlaces(@RequestParam String location, @RequestParam String radius, @RequestParam int numRestaurants) throws JsonMappingException, JsonProcessingException {
         return googlePlacesService.getRandomPlaces(location, radius, numRestaurants);
     }
+
+
+    //Receives POST request from client in the form of JSON of the 3 selected restuarants
+    @PostMapping("/api/selectThree")
+    public Restaurant selectOneRestaurant(@RequestBody List<Restaurant> selectedRestaurants) {
+        if (selectedRestaurants == null || selectedRestaurants.size() < 3) {
+            throw new IllegalArgumentException("At least 3 restaurants must be selected by user");
+        }
+        Random random = new Random();
+        int index = random.nextInt(selectedRestaurants.size());
+        return selectedRestaurants.get(index);
+    }
+
+    // Exception handler for IllegalArgumentException
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleIllegalArgumentException(IllegalArgumentException ex) {
+            return ex.getMessage();
+        }
 }
