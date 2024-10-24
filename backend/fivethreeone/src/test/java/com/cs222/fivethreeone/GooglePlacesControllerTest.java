@@ -13,7 +13,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import java.beans.Transient;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 
 @WebMvcTest(GooglePlacesController.class)
@@ -41,7 +44,8 @@ public class GooglePlacesControllerTest {
             .andExpect(jsonPath("$").isEmpty());
     }
 
-    @Testpublic void testGetNearbyRestaurantsSuccess() throws Exception {
+    @Test 
+    public void testGetNearbyRestaurantsSuccess() throws Exception {
         List<Restaurant> restaurants = Arrays.asList(
             new Restaurant("Taco Bell", "500m", "321 Green St"),
             new Restaurant("Canes", "1200m", "658 E Healey St")
@@ -59,6 +63,38 @@ public class GooglePlacesControllerTest {
                 .andExpect(jsonPath("$[1].distance").value("1200m"))
                 .andExpect(jsonPath("$[1].address").value("658 E Healey St"));
     }
+
+    @Test
+    public void testSelectOneRestaurantBadInput() throws Exception {
+        List<Restuarant> badInput = List.of(
+            new Restaurant("Taco Bell", "500m", "321 Green St"),
+            new Restaurant("Canes", "1200m", "658 E Healey St")
+        );
+        mockMvc.perform(post("/api/selectThree")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new ObjectMapper().writeValueAsString(badInput)))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string("At least 3 restaurants must be selected by user"));    
+    }
+    
+
+    @Test
+    public void testSelectOneRestaurant() throws Exception {
+        List<Restaurant> restaurants = Arrays.asList(
+            new Restaurant("Taco Bell", "500m", "321 Green St"),
+            new Restaurant("Canes", "1200m", "658 E Healey St"),
+            new Restaurant("McDonalds", "500m", "616 E Green St")
+        );
+         mockMvc.perform(post("/api/selectThree")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(new ObjectMapper().writeValueAsString(restaurants)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").isNotEmpty());  // Expect a valid restaurant in response
+    }
+
+
+
+
 
     
 }
