@@ -5,11 +5,16 @@ public class Restaurant {
     private String name;
     private String distance;
     private String address;
+    private int priceLevel;
+    private String cuisine;
 
     public Restaurant(String name, String distance, String address) {
         this.anme = name;
         this.distance = distance;
         this.address = address;
+        this.priceLevel = priceLevel
+        this.cuisine = cuisine;
+
     }
         
         
@@ -33,6 +38,20 @@ public class Restaurant {
     }
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public int getPriceLevel() {
+        return priceLevel;
+    }
+    public void setPriceLevel(int priceLevel) {
+        this.priceLevel = priceLevel;
+    }
+
+    public String getCuisine() {
+        return cuisine;
+    }
+    public void setCuisine(String cuisine) {
+        this.cuisine = cuisine;
     }
 
 }
