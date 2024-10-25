@@ -27,9 +27,12 @@ public class GooglePlacesController {
         return googlePlacesService.getPlaces(location, radius);
     }
 
-    @GetMapping("/api/random-places")
-    public List<Restaurant> getRandomPlaces(@RequestParam String location, @RequestParam String radius, @RequestParam int numRestaurants) throws JsonMappingException, JsonProcessingException {
-        return googlePlacesService.getRandomPlaces(location, radius, numRestaurants);
+    @GetMapping("/api/random-restaurants")
+    public List<Restaurant> getRandomRestaurants(@RequestParam String location, @RequestParam String radius, @RequestParam(defaultValue = "5") int numRestaurants,
+        @RequestParam(required = false) Integer priceLevel,
+        @RequestParam(required = false) String cuisine) 
+        throws JsonMappingException, JsonProcessingException {
+        return googlePlacesService.getRandomPlaces(location, radius, priceLevel, cuisine, numRestaurants);
     }
 
 
