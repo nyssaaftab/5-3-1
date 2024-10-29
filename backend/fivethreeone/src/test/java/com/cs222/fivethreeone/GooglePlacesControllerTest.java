@@ -1,6 +1,8 @@
 package com.cs222.fivethreeone;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyInt;
+
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
@@ -8,12 +10,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+
+
+import org.springframework.http.MediaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post; // Importing post method
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content; // Importing content method
+
 
 import java.beans.Transient;
 import java.util.Arrays;
@@ -68,7 +80,7 @@ public class GooglePlacesControllerTest {
 
     @Test
     public void testSelectOneRestaurantBadInput() throws Exception {
-        List<Restuarant> badInput = List.of(
+        List<Restaurant> badInput = List.of(
             new Restaurant("Taco Bell", "500m", "321 Green St"),
             new Restaurant("Canes", "1200m", "658 E Healey St")
         );
@@ -92,6 +104,31 @@ public class GooglePlacesControllerTest {
             .content(new ObjectMapper().writeValueAsString(restaurants)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").isNotEmpty());  // Expect a valid restaurant in response
+    }
+
+    @Test
+    public void testGetFilteredRestaurants() throws Exception {
+        List<Restaurant> filteredRestaurants = Arrays.asList(
+            new Restaurant("Taco Bell", "500m", "321 Green St"),
+            new Restaurant("Canes", "1200m", "658 E Healey St")
+        );
+        when(googlePlacesService.getRandomRestaurants(anyString(), anyString(), anyString(), anyString(), anyInt()))
+            .thenReturn(filteredRestaurants);
+
+        mockMvc.perform(get("/api/random-places")
+            .param("location", "40.730610,-73.935242")
+            .param("radius", "1500")
+            .param("numRestaurants", "2")  
+            .param("priceLevel", "2")      
+            .param("cuisine", "Mexican"))  
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$[0].name").value("Taco Bell"))
+            .andExpect(jsonPath("$[0].distance").value("500m"))
+            .andExpect(jsonPath("$[0].address").value("321 Green St"))
+            .andExpect(jsonPath("$[1].name").value("Canes"))
+            .andExpect(jsonPath("$[1].distance").value("1200m"))
+            .andExpect(jsonPath("$[1].address").value("658 E Healey St"));
     }
 
 
