@@ -1,5 +1,5 @@
 package com.cs222.fivethreeone;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+//import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 public class Restaurant {
     private String name;
