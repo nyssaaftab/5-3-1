@@ -2,6 +2,7 @@ package com.cs222.fivethreeone;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
 @JsonIgnoreProperties(ignoreUnknown = true) // Ignore any fields not in this class
 public class Restaurant {
     private String name;
