@@ -55,9 +55,15 @@ public class GooglePlacesService {
 
         url.append("&key=").append(apiKey);
 
+        
+
+
         String response = restTemplate.getForObject(url.toString(), String.class); //returns raw JSON response
         JsonNode root = objectMapper.readTree(response);
         JsonNode results = root.path("results");
+
+        System.out.println("Requesting Google Places API: " + url); // Log the API URL
+        System.out.println("results: " + response);
 
 
         List<Restaurant> restaurants = objectMapper.convertValue(results, new TypeReference<List<Restaurant>>() {});
