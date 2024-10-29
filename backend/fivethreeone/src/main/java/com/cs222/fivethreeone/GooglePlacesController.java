@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,6 +19,7 @@ import java.util.Random;
 
 
 @RestController
+@RequestMapping("/api/restaurants")
 public class GooglePlacesController {
     private final GooglePlacesService googlePlacesService;
 
@@ -25,12 +27,12 @@ public class GooglePlacesController {
         this.googlePlacesService = googlePlacesService;
     }
 
-    @GetMapping("/api/places")
+    @GetMapping("/nearby")
     public List<Restaurant> getPlaces(@RequestParam String location, @RequestParam String radius) throws JsonMappingException, JsonProcessingException {
         return googlePlacesService.getPlaces(location, radius);
     }
 
-    @GetMapping("/api/random-restaurants")
+    @GetMapping("/random")
     public List<Restaurant> getRandomRestaurants(@RequestParam String location, @RequestParam String radius, @RequestParam(defaultValue = "5") int numRestaurants,
         @RequestParam(required = false) String priceLevel,
         @RequestParam(required = false) String cuisine) 
@@ -40,7 +42,7 @@ public class GooglePlacesController {
 
 
     //Receives POST request from client in the form of JSON of the 3 selected restuarants
-    @PostMapping("/api/selectThree")
+    @PostMapping("/select")
     public Restaurant selectOneRestaurant(@RequestBody List<Restaurant> selectedRestaurants) {
         if (selectedRestaurants == null || selectedRestaurants.size() < 3) {
             throw new IllegalArgumentException("At least 3 restaurants must be selected by user");
