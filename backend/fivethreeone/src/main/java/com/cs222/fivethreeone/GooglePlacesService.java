@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Collections;
+
 
 @Service
 public class GooglePlacesService {
@@ -35,11 +37,25 @@ public class GooglePlacesService {
         return objectMapper.convertValue(results, new TypeReference<List<Restaurant>>() {});
     }
 
-    public List<Restaurant> getRandomPlaces(String location, String radius, int numRestaurants) throws JsonMappingException, JsonProcessingException {
-        String url = String.format(
-            "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%s&key=%s",
-            location, radius, apiKey);
-        String response = restTemplate.getForObject(url, String.class); //returns raw JSON response
+    public List<Restaurant> getRandomRestaurants(String location, String radius, String priceLevel, String cuisine, int numRestaurants) throws JsonMappingException, JsonProcessingException {
+        
+        StringBuilder url = new StringBuilder(
+            String.format("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%s&type=restaurant", 
+            location, radius)
+        );
+
+        if (priceLevel != null) {
+            url.append("&minprice=").append(priceLevel);
+            url.append("&maxprice=").append(priceLevel);
+        }
+
+        if (cuisine != null && !cuisine.isEmpty()) {
+            url.append("&keyword=").append(cuisine);
+        }
+
+        url.append("&key=").append(apiKey);
+
+        String response = restTemplate.getForObject(url.toString(), String.class); //returns raw JSON response
         JsonNode root = objectMapper.readTree(response);
         JsonNode results = root.path("results");
 
@@ -47,8 +63,12 @@ public class GooglePlacesService {
         List<Restaurant> restaurants = objectMapper.convertValue(results, new TypeReference<List<Restaurant>>() {});
         Collections.shuffle(restaurants);
 
+        if (restaurants.isEmpty()) {
+            return Collections.emptyList(); // Return an empty list if no restaurants found
+}
+
         if (restaurants.size() > numRestaurants) {
-            return restaurants.subList(0, 5);
+            return restaurants.subList(0, numRestaurants);
         } else {
             return restaurants;
         }
