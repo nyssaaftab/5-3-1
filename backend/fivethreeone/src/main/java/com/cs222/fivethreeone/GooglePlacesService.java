@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Collections;
+
 
 @Service
 public class GooglePlacesService {
@@ -35,7 +37,7 @@ public class GooglePlacesService {
         return objectMapper.convertValue(results, new TypeReference<List<Restaurant>>() {});
     }
 
-    public List<Restaurant> getRandomRestaurants(String location, String radius, Integer priceLevel, String cuisine, int numRestaurants) throws JsonMappingException, JsonProcessingException {
+    public List<Restaurant> getRandomRestaurants(String location, String radius, String priceLevel, String cuisine, int numRestaurants) throws JsonMappingException, JsonProcessingException {
         
         StringBuilder url = new StringBuilder(
             String.format("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%s&type=restaurant", 
@@ -61,8 +63,12 @@ public class GooglePlacesService {
         List<Restaurant> restaurants = objectMapper.convertValue(results, new TypeReference<List<Restaurant>>() {});
         Collections.shuffle(restaurants);
 
+        if (restaurants.isEmpty()) {
+            return Collections.emptyList(); // Return an empty list if no restaurants found
+}
+
         if (restaurants.size() > numRestaurants) {
-            return restaurants.subList(0, 5);
+            return restaurants.subList(0, numRestaurants);
         } else {
             return restaurants;
         }
