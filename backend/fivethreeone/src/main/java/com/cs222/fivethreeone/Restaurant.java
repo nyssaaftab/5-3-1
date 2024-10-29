@@ -1,6 +1,9 @@
 package com.cs222.fivethreeone;
-//import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+
+@JsonIgnoreProperties(ignoreUnknown = true) // Ignore any fields not in this class
 public class Restaurant {
     private String name;
     private String distance;
@@ -8,22 +11,35 @@ public class Restaurant {
     private String priceLevel;
     private String cuisine;
 
-    public Restaurant(String name, String distance, String address) {
+    @JsonProperty("business_status") // Map the JSON field to this variable
+    private String businessStatus;
+
+    public Restaurant(String name, String distance, String address, String priceLevel, String cuisine, String businessStatus) {
         this.name = name;
         this.distance = distance;
         this.address = address;
-        //this.priceLevel = priceLevel;
-        //this.cuisine = cuisine;
-
+        this.priceLevel = priceLevel;
+        this.cuisine = cuisine;
+        this.businessStatus = businessStatus;
     }
-        
-        
+
+    public Restaurant() {
+    }
+
     // Getters and Setters
     public String getName() {
         return name;
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBusinessStatus() { 
+        return businessStatus; 
+    }
+
+    public void setBusinessStatus(String businessStatus) { 
+        this.businessStatus = businessStatus; 
     }
 
     public String getDistance() {
@@ -53,5 +69,4 @@ public class Restaurant {
     public void setCuisine(String cuisine) {
         this.cuisine = cuisine;
     }
-
 }
