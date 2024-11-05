@@ -2,6 +2,7 @@ import React from 'react';
 import Nat from './nat.png';
 import Elaina from './elaina.jpg';
 import Nyssa from './nyssa.jpg';
+import Nancy from './nancy.jpg';
 
 function AboutUs() {
   return (
@@ -15,7 +16,7 @@ function AboutUs() {
         <img src={Nat} alt="Nat" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }} />
         <img src={Elaina} alt="Elaina" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }} />
         <img src={Nyssa} alt="Nyssa" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }} />
-        <img src={Nat} alt="Nancy" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }} />
+        <img src={Nancy} alt="Nancy" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }} />
       </div>
     </div>
   );
