@@ -11,16 +11,25 @@ public class Restaurant {
     private String priceLevel;
     private String cuisine;
 
-    @JsonProperty("business_status") // Map the JSON field to this variable
-    private String businessStatus;
+    /* @JsonProperty("business_status") // Map the JSON field to this variable
+    private String businessStatus; */
 
-    public Restaurant(String name, String distance, String address, String priceLevel, String cuisine, String businessStatus) {
+    public Restaurant(String name, String distance, String address, String priceLevel, String cuisine) { //String businessStatus) {
         this.name = name;
         this.distance = distance;
         this.address = address;
         this.priceLevel = priceLevel;
         this.cuisine = cuisine;
-        this.businessStatus = businessStatus;
+        //this.businessStatus = businessStatus;
+    }
+
+    public Restaurant(String name, String distance, String address) { //String businessStatus) {
+        this.name = name;
+        this.distance = distance;
+        this.address = address;
+        this.priceLevel = null;
+        this.cuisine = null;
+        //this.businessStatus = businessStatus;
     }
 
     public Restaurant() {
@@ -34,13 +43,13 @@ public class Restaurant {
         this.name = name;
     }
 
-    public String getBusinessStatus() { 
+    /* public String getBusinessStatus() { 
         return businessStatus; 
     }
 
     public void setBusinessStatus(String businessStatus) { 
         this.businessStatus = businessStatus; 
-    }
+    } */
 
     public String getDistance() {
         return distance;
