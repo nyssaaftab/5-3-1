@@ -43,7 +43,7 @@ public class GooglePlacesControllerTest {
     
     @Test
     public void testGetNearbyRestaurantsBadRequest() throws Exception {
-    mockMvc.perform(get("/api/places"))
+    mockMvc.perform(get("/api/restaurants/nearby"))
             .andExpect(status().isBadRequest());
     }
 
@@ -51,7 +51,7 @@ public class GooglePlacesControllerTest {
     public void testGetNearbyRestaurantsNoResults() throws Exception {
         when(googlePlacesService.getPlaces(anyString(), anyString())).thenReturn(Collections.emptyList());
     
-        mockMvc.perform(get("/api/places")
+        mockMvc.perform(get("/api/restaurants/nearby")
             .param("location", "40.730610,-73.935242")
             .param("radius", "1500"))
             .andExpect(status().isOk())
@@ -65,7 +65,7 @@ public class GooglePlacesControllerTest {
             new Restaurant("Canes", "1200m", "658 E Healey St")
         );
         when(googlePlacesService.getPlaces(anyString(), anyString())).thenReturn(restaurants);
-        mockMvc.perform(get("/api/places")
+        mockMvc.perform(get("/api/restaurants/nearby")
                 .param("location", "40.730610,-73.935242")
                 .param("radius", "1500"))
                 .andExpect(status().isOk())
@@ -84,7 +84,7 @@ public class GooglePlacesControllerTest {
             new Restaurant("Taco Bell", "500m", "321 Green St"),
             new Restaurant("Canes", "1200m", "658 E Healey St")
         );
-        mockMvc.perform(post("/api/selectThree")
+        mockMvc.perform(post("/api/restaurants/select")
             .contentType(MediaType.APPLICATION_JSON)
             .content(new ObjectMapper().writeValueAsString(badInput)))
             .andExpect(status().isBadRequest())
@@ -99,7 +99,7 @@ public class GooglePlacesControllerTest {
             new Restaurant("Canes", "1200m", "658 E Healey St"),
             new Restaurant("McDonalds", "500m", "616 E Green St")
         );
-         mockMvc.perform(post("/api/selectThree")
+         mockMvc.perform(post("/api/restaurants/select")
             .contentType(MediaType.APPLICATION_JSON)
             .content(new ObjectMapper().writeValueAsString(restaurants)))
             .andExpect(status().isOk())
@@ -115,7 +115,7 @@ public class GooglePlacesControllerTest {
         when(googlePlacesService.getRandomRestaurants(anyString(), anyString(), anyString(), anyString(), anyInt()))
             .thenReturn(filteredRestaurants);
 
-        mockMvc.perform(get("/api/random-places")
+        mockMvc.perform(get("/api/restaurants/random")
             .param("location", "40.730610,-73.935242")
             .param("radius", "1500")
             .param("numRestaurants", "2")  
