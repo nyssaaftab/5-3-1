@@ -77,6 +77,39 @@ public class GooglePlacesServiceTests {
         assertEquals(numRestaurants, restaurants.size()); // Ensure it returns 5 restaurants
     }
 
+    @Test
+    void testGetRandomRestaurantsWithPriceLevelAndCuisine() throws Exception {
+        String location = "40.712776,-74.005974";
+        String radius = "1500";
+        String priceLevel = "2";
+        String cuisine = "italian";
+        int numRestaurants = 5;
+        String jsonResponse = "{ \"results\": [{ \"name\": \"Italian Restaurant\" }] }";
+
+        when(restTemplate.getForObject(contains("&minprice=2&maxprice=2&keyword=italian"), eq(String.class)))
+                .thenReturn(jsonResponse);
+
+        List<Restaurant> restaurants = googlePlacesService.getRandomRestaurants(location, radius, priceLevel, cuisine, numRestaurants);
+
+        assertFalse(restaurants.isEmpty());
+        assertEquals("Italian Restaurant", restaurants.get(0).getName());
+    }
+
+    @Test
+    void testGetRandomRestaurantsWhenAPIRespondsWithFewerRestaurants() throws Exception {
+        String location = "40.712776,-74.005974";
+        String radius = "1500";
+        int numRestaurants = 5;
+        String jsonResponse = "{ \"results\": [{ \"name\": \"Only Restaurant\" }] }";
+
+        when(restTemplate.getForObject(anyString(), eq(String.class))).thenReturn(jsonResponse);
+
+        List<Restaurant> restaurants = googlePlacesService.getRandomRestaurants(location, radius, null, null, numRestaurants);
+
+        assertEquals(1, restaurants.size());
+    }
+
+
 
 
 
