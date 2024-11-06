@@ -9,11 +9,12 @@ import Restaurants from './Restaurants';
 import AboutUs from './AboutUs';
 import Start from './Start';
 import homelogo from './road.png';
-
+//import { useNavigate } from 'react-router-dom';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
-
+  //const navigate = useNavigate();
+ 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };

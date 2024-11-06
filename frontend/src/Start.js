@@ -1,13 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function FilterPage() {
-  const [priceValue, setPriceValue] = useState(1); // State to track selected price
+  const [priceValue, setPriceValue] = useState(1);
+  const [cuisines, setCuisines] = useState([]);
+
+  // Fetch cuisine types from backend
+  useEffect(() => {
+    const fetchCuisines = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/cuisines');
+        setCuisines(response.data); // Assuming backend sends an array of cuisine names
+      } catch (error) {
+        console.error('Error fetching cuisines:', error);
+      }
+    };
+    fetchCuisines();
+  }, []);
 
   const handleRangeChange = (e) => {
     setPriceValue(e.target.value);
   };
 
-  const priceLabels = ["$", "$$", "$$$", "$$$$", "$$$$$"]; // Array for labels
+  const priceLabels = ["$", "$$", "$$$", "$$$$", "$$$$$"];
 
   return (
     <div className="filter-page">
@@ -17,9 +32,11 @@ function FilterPage() {
           <label>Cuisine Type</label>
           <select>
             <option value="all">All</option>
-            <option value="thai">Thai</option>
-            <option value="mexican">Mexican</option>
-            <option value="american">American</option>
+            {cuisines.map((cuisine) => (
+              <option key={cuisine} value={cuisine.toLowerCase()}>
+                {cuisine}
+              </option>
+            ))}
           </select>
         </div>
         <div className="filter-group">
