@@ -83,7 +83,7 @@
   color: white;
   position: absolute;
   top: 15px;
-  left: 20px;
+  left: 45px;
 }
 
 .nav-links {
@@ -107,4 +107,14 @@
   color: white;
   text-decoration: none;
   font-size: 18px;
+}
+
+.home-link {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  margin-bottom: 20px; 
+}
+
+.home-link img {
+  cursor: pointer; /* Change cursor to pointer when hovering over the logo */
 }
