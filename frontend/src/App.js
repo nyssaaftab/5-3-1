@@ -1,4 +1,4 @@
-import logo from './road.webp';
+//import logo from './road.webp';
 import star from './5star.webp';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
