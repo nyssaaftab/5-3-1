@@ -37,7 +37,7 @@ public class GooglePlacesService {
         return objectMapper.convertValue(results, new TypeReference<List<Restaurant>>() {});
     }
 
-    public List<Restaurant> getRandomRestaurants(String location, String radius, String priceLevel, String cuisine, int numRestaurants) throws JsonMappingException, JsonProcessingException {
+    public List<Restaurant> getRandomRestaurants(String location, String radius, Integer priceLevel, String cuisine, int numRestaurants) throws JsonMappingException, JsonProcessingException {
         
         StringBuilder url = new StringBuilder(
             String.format("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%s&type=restaurant", 

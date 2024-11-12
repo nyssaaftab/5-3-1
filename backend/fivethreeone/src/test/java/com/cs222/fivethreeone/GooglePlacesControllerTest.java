@@ -4,6 +4,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.anyInt;
 
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +114,7 @@ public class GooglePlacesControllerTest {
             new Restaurant("Taco Bell", "500m", "321 Green St"),
             new Restaurant("Canes", "1200m", "658 E Healey St")
         );
-        when(googlePlacesService.getRandomRestaurants(anyString(), anyString(), anyString(), anyString(), anyInt()))
+        when(googlePlacesService.getRandomRestaurants(anyString(), anyString(), eq(2), anyString(), anyInt()))
             .thenReturn(filteredRestaurants);
 
         mockMvc.perform(get("/api/restaurants/random")
