@@ -10,7 +10,7 @@ function FilterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get('http://localhost:8081/api/restaurants', {
+      const response = await axios.get('http://localhost:8081/api/restaurants/random', {
         params: {
           cuisineType: cuisineType === 'all' ? '' : cuisineType,
           priceLevel: priceValue,
@@ -47,6 +47,11 @@ function FilterPage() {
             onChange={(e) => setPriceValue(e.target.value)}
           />
           <div>Price: {"$".repeat(priceValue)}</div>
+        </div>
+        <div className="filter-group">
+          <label>Dietary Preferences</label>
+          <input type="checkbox" /> Vegetarian
+          <input type="checkbox" /> Vegan
         </div>
         <button type="submit">Generate Restaurants</button>
       </form>
