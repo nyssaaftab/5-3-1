@@ -6,21 +6,49 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true) // Ignore any fields not in this class
 public class Restaurant {
     private String name;
+
     private String distance;
+
+    @JsonProperty("vicinity") // Map JSON field "vicinity" to "address"
     private String address;
-    private String priceLevel;
+
+    @JsonProperty("price_level") 
+    private Integer priceLevel;
+
     private String cuisine;
 
-    /* @JsonProperty("business_status") // Map the JSON field to this variable
-    private String businessStatus; */
+    private Double rating; 
 
-    public Restaurant(String name, String distance, String address, String priceLevel, String cuisine) { //String businessStatus) {
+    @JsonProperty("user_ratings_total")
+    private Integer numRatings;
+
+    @JsonProperty("opening_hours") 
+    private OpeningHours openingHours;
+
+    @JsonProperty("icon") 
+    private String iconUrl;
+
+    public static class OpeningHours {
+        @JsonProperty("open_now")
+        private Boolean openNow;
+
+        public Boolean getOpenNow() {
+            return openNow;
+        }
+
+        public void setOpenNow(Boolean openNow) {
+            this.openNow = openNow;
+        }
+    }
+
+
+    public Restaurant(String name, String distance, String address, Integer priceLevel, String cuisine) { //String businessStatus) {
         this.name = name;
         this.distance = distance;
         this.address = address;
         this.priceLevel = priceLevel;
         this.cuisine = cuisine;
-        //this.businessStatus = businessStatus;
+        
     }
 
     public Restaurant(String name, String distance, String address) { //String businessStatus) {
@@ -43,17 +71,10 @@ public class Restaurant {
         this.name = name;
     }
 
-    /* public String getBusinessStatus() { 
-        return businessStatus; 
-    }
-
-    public void setBusinessStatus(String businessStatus) { 
-        this.businessStatus = businessStatus; 
-    } */
-
     public String getDistance() {
         return distance;
     }
+
     public void setDistance(String distance) {
         this.distance = distance;
     }
@@ -65,10 +86,10 @@ public class Restaurant {
         this.address = address;
     }
 
-    public String getPriceLevel() {
+    public Integer getPriceLevel() {
         return priceLevel;
     }
-    public void setPriceLevel(String priceLevel) {
+    public void setPriceLevel(Integer priceLevel) {
         this.priceLevel = priceLevel;
     }
 
@@ -77,5 +98,42 @@ public class Restaurant {
     }
     public void setCuisine(String cuisine) {
         this.cuisine = cuisine;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public Integer numRatings() {
+        return numRatings;
+    }
+
+    public void numRatings(Integer numRatings) {
+        this.numRatings = numRatings;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    public OpeningHours getOpeningHours() {
+        return openingHours;
+    }
+
+    public void setOpeningHours(OpeningHours openingHours) {
+        this.openingHours = openingHours;
+    }
+
+    // Assuming you need to access openNow:
+    public Boolean isOpenNow() {
+        return this.openingHours != null ? openingHours.getOpenNow() : null;
     }
 }
