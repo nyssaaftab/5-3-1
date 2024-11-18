@@ -10,6 +10,7 @@ function FilterPage() {
   const [location, setLocation] = useState('');
   const [radiusMiles, setRadiusMiles] = useState(0.5);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
