@@ -7,6 +7,7 @@ function RestaurantCard({ restaurant }) {
       <img src={restaurant.image} alt={restaurant.name} />
       <div className="overlay">
         <h2>{restaurant.name}</h2>
+        <p className="description">{restaurant.description}</p>
       </div>
     </div>
   );
