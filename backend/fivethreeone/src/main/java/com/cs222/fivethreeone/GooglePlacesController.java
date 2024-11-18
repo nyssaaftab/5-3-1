@@ -34,7 +34,10 @@ public class GooglePlacesController {
 
 //http://localhost:8081/api/restaurants/random?location=40.10996616819772, -88.23113574620692&radius=1000&numRestaurants=5&priceLevel=2&cuisine=italian
     @GetMapping("/random")
-    public List<Restaurant> getRandomRestaurants(@RequestParam String location, @RequestParam String radius, @RequestParam(defaultValue = "5") int numRestaurants,
+    public List<Restaurant> getRandomRestaurants(
+        @RequestParam(defaultValue = "40.1106,-88.2073") String location, // Default to latitude,longitude
+        @RequestParam(defaultValue = "1500") String radius,
+        @RequestParam(defaultValue = "5") int numRestaurants,
         @RequestParam(required = false) Integer priceLevel,
         @RequestParam(required = false) String cuisine) 
         throws JsonMappingException, JsonProcessingException {
