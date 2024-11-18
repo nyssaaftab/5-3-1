@@ -10,7 +10,7 @@ function FilterPage() {
   const [location, setLocation] = useState('');
   const [radiusMiles, setRadiusMiles] = useState(0.5);
 
-  // Get current location and update the location state
+  // getcurrent location and update the location state
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -18,8 +18,8 @@ function FilterPage() {
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
 
-          // You can reverse geocode the coordinates to get a human-readable address, or just use the coords
-          setLocation(`${lat}, ${lon}`);  // Setting location as coordinates, or you can use reverse geocoding
+          // fix later to make more readable
+          setLocation(`${lat}, ${lon}`);  // currently set location as coordinates
         },
         (err) => {
           console.error('Error retrieving location:', err);
@@ -39,8 +39,8 @@ function FilterPage() {
         params: {
           cuisineType: cuisineType === 'all' ? '' : cuisineType,
           priceLevel: priceValue,
-          location: location, // Include location in the request params
-          radius: radiusInMeters, // Include radius in the request params
+          location: location, 
+          radius: radiusInMeters,
         },
       });
       setRestaurants(response.data); // Display results
