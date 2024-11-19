@@ -2,13 +2,18 @@ import React from 'react';
 import './RestaurantCard.css';
 
 function RestaurantCard({ restaurant, onSelect, isSelected }) {
+  const handleCardClick = () => {
+    if (onSelect) {
+      onSelect(restaurant.id); // Call the function passed from the parent
+    } else {
+      console.error("onSelect function is not provided.");
+    }
+  };
+
   return (
     <div
       className={`restaurant-card ${isSelected ? 'selected' : ''}`}
-      onClick={() => {
-        console.log(`Card clicked: ${restaurant.id}, Selected: ${isSelected}`);
-        onSelect(restaurant.id); // Pass ID to parent handler
-      }}
+      onClick={handleCardClick}
     >
       <img
         src={restaurant.image || 'fallback-image-url.jpg'}
