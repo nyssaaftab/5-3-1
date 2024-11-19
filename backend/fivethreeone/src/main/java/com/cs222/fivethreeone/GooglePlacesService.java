@@ -74,11 +74,35 @@ public class GooglePlacesService {
 }
 
         if (restaurants.size() > numRestaurants) {
-            return restaurants.subList(0, numRestaurants);
-        } else {
-            return restaurants;
+            restaurants = restaurants.subList(0, numRestaurants);
+        } 
+
+        for (Restaurant r : restaurants) {
+            getDetails(r);
         }
 
+        return restaurants;
+
     }
+
+    private void getDetails(Restaurant restaurant) throws JsonProcessingException {
+    String detailsUrl = String.format(
+        "https://maps.googleapis.com/maps/api/place/details/json?fields=editorial_summary,website,formatted_phone_number&place_id=%s&key=%s", 
+        restaurant.getID(), apiKey);
+
+    String detailsResponse = restTemplate.getForObject(detailsUrl, String.class);
+    JsonNode detailsRoot = objectMapper.readTree(detailsResponse);
+    JsonNode detailsResult = detailsRoot.path("result");
+
+    if (detailsResult.has("editorial_summary")) {
+        restaurant.setOverview(detailsResult.path("editorial_summary").path("overview").asText());
+    }
+    if (detailsResult.has("website")) {
+        restaurant.setWebsite(detailsResult.path("website").asText());
+    }
+    if (detailsResult.has("formatted_phone_number")) {
+        restaurant.setPhone(detailsResult.path("formatted_phone_number").asText());
+    }
+}    
 
 }

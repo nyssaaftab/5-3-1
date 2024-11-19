@@ -28,6 +28,17 @@ public class Restaurant {
     @JsonProperty("icon") 
     private String iconUrl;
 
+    @JsonProperty("place_id")
+    private String id;
+
+    @JsonProperty("editorial_overview")
+    private String overview;
+
+    private String website;
+
+    @JsonProperty("formatted_phone_number")
+    private String phone;
+
     public static class OpeningHours {
         @JsonProperty("open_now")
         private Boolean openNow;
@@ -42,6 +53,8 @@ public class Restaurant {
     }
 
 
+
+
     public Restaurant(String name, String distance, String address, Integer priceLevel, String cuisine) { //String businessStatus) {
         this.name = name;
         this.distance = distance;
@@ -51,13 +64,13 @@ public class Restaurant {
         
     }
 
-    public Restaurant(String name, String distance, String address) { //String businessStatus) {
+    public Restaurant(String name, String distance, String address) { 
         this.name = name;
         this.distance = distance;
         this.address = address;
         this.priceLevel = null;
         this.cuisine = null;
-        //this.businessStatus = businessStatus;
+        
     }
 
     public Restaurant() {
@@ -70,6 +83,8 @@ public class Restaurant {
     public void setName(String name) {
         this.name = name;
     }
+
+    
 
     public String getDistance() {
         return distance;
@@ -93,12 +108,6 @@ public class Restaurant {
         this.priceLevel = priceLevel;
     }
 
-    public String getCuisine() {
-        return cuisine;
-    }
-    public void setCuisine(String cuisine) {
-        this.cuisine = cuisine;
-    }
 
     public Double getRating() {
         return rating;
@@ -116,13 +125,6 @@ public class Restaurant {
         this.numRatings = numRatings;
     }
 
-    public String getIconUrl() {
-        return iconUrl;
-    }
-
-    public void setIconUrl(String iconUrl) {
-        this.iconUrl = iconUrl;
-    }
 
     public OpeningHours getOpeningHours() {
         return openingHours;
@@ -136,4 +138,22 @@ public class Restaurant {
     public Boolean isOpenNow() {
         return this.openingHours != null ? openingHours.getOpenNow() : null;
     }
+
+    public String getID() {
+        return id;
+    }
+
+    public void setID(String id) {
+        this.id = id;
+    } 
+
+    public String getOverview() { return overview; }
+    public void setOverview(String overview) { this.overview = overview; }
+
+    public String getWebsite() { return website; }
+    public void setWebsite(String website) { this.website = website; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
 }
