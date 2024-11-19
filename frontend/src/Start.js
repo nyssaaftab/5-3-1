@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import RestaurantCard from './RestaurantCard'; 
+import RestaurantCard from './RestaurantCard';
 
 function FilterPage() {
   const [priceValue, setPriceValue] = useState(1);
@@ -11,6 +11,21 @@ function FilterPage() {
   const [radiusMiles, setRadiusMiles] = useState(0.5);
   const [selectedRestaurants, setSelectedRestaurants] = useState([]);
   const [chosenRestaurant, setChosenRestaurant] = useState(null);
+
+  const getSelectionMessage = () => {
+    switch (selectedRestaurants.length) {
+      case 0:
+        return "Please select 3 restaurants to continue";
+      case 1:
+        return "Great! You've selected 1 restaurant. Please select 2 more";
+      case 2:
+        return "Almost there! Select 1 more restaurant";
+      case 3:
+        return "Perfect! You've selected 3 restaurants";
+      default:
+        return "";
+    }
+  };
 
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
@@ -49,11 +64,16 @@ function FilterPage() {
   };
 
   const handleSelectRestaurant = (id) => {
-    setSelectedRestaurants((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((rid) => rid !== id);
+    setSelectedRestaurants((prevSelected) => {
+      if (prevSelected.includes(id)) {
+        // If already selected, deselect
+        return prevSelected.filter((selectedId) => selectedId !== id);
+      } else if (prevSelected.length < 3) {
+        // If not selected and less than 3, add to selection
+        return [...prevSelected, id];
       }
-      return prev.length < 3 ? [...prev, id] : prev;
+      // If already 3 selected, ignore additional clicks
+      return prevSelected;
     });
   };
 
@@ -74,7 +94,6 @@ function FilterPage() {
       {!chosenRestaurant ? (
         <>
           <form onSubmit={handleSubmit} className="filter-form">
-            {/* Filter fields */}
             <div className="filter-group">
               <label>Cuisine Type</label>
               <select value={cuisineType} onChange={(e) => setCuisineType(e.target.value)}>
@@ -128,7 +147,6 @@ function FilterPage() {
             <button type="submit">Generate Restaurants</button>
           </form>
 
-          {/* Render restaurant cards */}
           <div className="restaurant-results">
             {restaurants.map((restaurant) => (
               <div key={restaurant.id}>
@@ -140,9 +158,18 @@ function FilterPage() {
               </div>
             ))}
           </div>
-          {selectedRestaurants.length === 3 && (
-            <button onClick={submitSelection}>Submit Selection</button>
-          )}
+
+          <div className="restaurant-selection-status">
+            <p className="selection-message">{getSelectionMessage()}</p>
+            {selectedRestaurants.length === 3 && (
+              <button 
+                onClick={submitSelection}
+                className="submit-button"
+              >
+                Choose My Restaurant
+              </button>
+            )}
+          </div>
         </>
       ) : (
         <div>
