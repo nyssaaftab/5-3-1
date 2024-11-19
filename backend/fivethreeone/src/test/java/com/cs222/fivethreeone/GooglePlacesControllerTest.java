@@ -74,10 +74,10 @@ public class GooglePlacesControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].name").value("Taco Bell"))
                 .andExpect(jsonPath("$[0].distance").value("500m"))
-                .andExpect(jsonPath("$[0].address").value("321 Green St"))
+                .andExpect(jsonPath("$[0].vicinity").value("321 Green St"))
                 .andExpect(jsonPath("$[1].name").value("Canes"))
                 .andExpect(jsonPath("$[1].distance").value("1200m"))
-                .andExpect(jsonPath("$[1].address").value("658 E Healey St"));
+                .andExpect(jsonPath("$[1].vicinity").value("658 E Healey St"));
     }
 
     @Test
@@ -127,10 +127,10 @@ public class GooglePlacesControllerTest {
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$[0].name").value("Taco Bell"))
             .andExpect(jsonPath("$[0].distance").value("500m"))
-            .andExpect(jsonPath("$[0].address").value("321 Green St"))
+            .andExpect(jsonPath("$[0].vicinity").value("321 Green St"))
             .andExpect(jsonPath("$[1].name").value("Canes"))
             .andExpect(jsonPath("$[1].distance").value("1200m"))
-            .andExpect(jsonPath("$[1].address").value("658 E Healey St"));
+            .andExpect(jsonPath("$[1].vicinity").value("658 E Healey St"));
     }
 
 
