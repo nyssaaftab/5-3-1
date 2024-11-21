@@ -31,6 +31,7 @@ function FilterPage() {
     }
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const radiusInMeters = radiusMiles * 1609.34;
