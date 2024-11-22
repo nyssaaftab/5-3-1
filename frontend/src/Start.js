@@ -27,6 +27,7 @@ function FilterPage() {
     }
   };
 
+  // Get current location and update the location state
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -44,6 +45,10 @@ function FilterPage() {
       alert('Geolocation is not supported by this browser.');
     }
   };
+<<<<<<< HEAD
+
+=======
+>>>>>>> 90f4cd9045c1ebf51171fa42b5a30e1b4c13c3d8
 
   const handleSubmit = async (e) => {
     e.preventDefault();
