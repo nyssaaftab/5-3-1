@@ -45,10 +45,6 @@ function FilterPage() {
       alert('Geolocation is not supported by this browser.');
     }
   };
-<<<<<<< HEAD
-
-=======
->>>>>>> 90f4cd9045c1ebf51171fa42b5a30e1b4c13c3d8
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,35 +58,42 @@ function FilterPage() {
           radius: radiusInMeters,
         },
       });
-      setRestaurants(response.data);
+      // Add unique IDs to the restaurants
+      const restaurantsWithIds = response.data.map((restaurant, index) => ({
+        ...restaurant,
+        id: `${restaurant.name}-${index}` // Create unique ID using name and index
+      }));
+      console.log("Restaurants with IDs:", restaurantsWithIds);
+      setRestaurants(restaurantsWithIds);
     } catch (error) {
       console.error('Error fetching restaurants:', error);
     }
   };
 
-  const handleSelectRestaurant = (id) => {
+  const handleSelectRestaurant = (restaurantId) => {
+    console.log("Selected Restaurants Before:", selectedRestaurants);
     setSelectedRestaurants((prevSelected) => {
-      if (prevSelected.includes(id)) {
-        // If already selected, deselect
-        return prevSelected.filter((selectedId) => selectedId !== id);
-      } else if (prevSelected.length < 3) {
-        // If not selected and less than 3, add to selection
-        return [...prevSelected, id];
-      }
-      // If already 3 selected, ignore additional clicks
-      return prevSelected;
+      const updated = prevSelected.includes(restaurantId)
+        ? prevSelected.filter((id) => id !== restaurantId)
+        : prevSelected.length < 3
+        ? [...prevSelected, restaurantId]
+        : prevSelected;
+      console.log("Selected Restaurants After:", updated);
+      return updated;
     });
   };
 
-  const submitSelection = async () => {
-    try {
-      const response = await axios.post('http://localhost:8081/api/restaurants/choose', {
-        selectedRestaurants,
-      });
-      setChosenRestaurant(response.data); // Assuming backend returns the chosen restaurant
-    } catch (error) {
-      console.error('Error selecting restaurant:', error);
-    }
+  const submitSelection = () => {
+    // Get the full restaurant objects for the selected IDs
+    const selectedRestaurantObjects = selectedRestaurants.map(id => 
+      restaurants.find(r => r.id === id)
+    );
+    
+    // Randomly select one restaurant
+    const randomIndex = Math.floor(Math.random() * selectedRestaurantObjects.length);
+    const chosenOne = selectedRestaurantObjects[randomIndex];
+    
+    setChosenRestaurant(chosenOne);
   };
 
   return (
@@ -153,16 +156,17 @@ function FilterPage() {
           </form>
 
           <div className="restaurant-results">
-            {restaurants.map((restaurant) => (
-              <div key={restaurant.id}>
-                <RestaurantCard 
-                  restaurant={restaurant} 
-                  isSelected={selectedRestaurants.includes(restaurant.id)}
-                  onSelect={() => handleSelectRestaurant(restaurant.id)} 
-                />
-              </div>
-            ))}
-          </div>
+  {restaurants.map((restaurant) => (
+    <div key={restaurant.id}>
+      <RestaurantCard 
+        restaurant={restaurant} 
+        isSelected={selectedRestaurants.includes(restaurant.id)}
+        onSelect={handleSelectRestaurant}
+      />
+    </div>
+  ))}
+</div>
+
 
           <div className="restaurant-selection-status">
             <p className="selection-message">{getSelectionMessage()}</p>
