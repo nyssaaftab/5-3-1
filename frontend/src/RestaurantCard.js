@@ -4,9 +4,7 @@ import './RestaurantCard.css';
 function RestaurantCard({ restaurant, onSelect, isSelected }) {
   const handleCardClick = () => {
     if (onSelect) {
-      onSelect(restaurant.id); // Call the function passed from the parent
-    } else {
-      console.error("onSelect function is not provided.");
+      onSelect(restaurant.id);
     }
   };
 
@@ -20,8 +18,12 @@ function RestaurantCard({ restaurant, onSelect, isSelected }) {
         alt={restaurant.name || 'Restaurant'}
       />
       <div className="overlay">
-        <h2>{restaurant.name || 'Unknown Restaurant'}</h2>
-        <p className="description">{restaurant.description || 'No description available'}</p>
+        <h2>{restaurant.name}</h2>
+        <p className="description">
+          {restaurant.rating ? `Rating: ${restaurant.rating}` : 'No rating available'}
+          <br/>
+          {restaurant.openNow ? '✓ Open Now' : '✗ Closed'}
+        </p>
       </div>
     </div>
   );
