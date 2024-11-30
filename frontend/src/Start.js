@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import RestaurantCard from './RestaurantCard';
+import LocationSearch from './LocationSearch'; // Import the LocationSearch component
+import CurrentLocationButton from './CurrentLocationButton'; // Import the CurrentLocationButton component
 
 function FilterPage() {
   const [priceValue, setPriceValue] = useState(1);
@@ -24,25 +26,6 @@ function FilterPage() {
         return "Perfect! You've selected 3 restaurants";
       default:
         return "";
-    }
-  };
-
-  // Get current location and update the location state
-  const getCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          setLocation(`${lat}, ${lon}`);
-        },
-        (err) => {
-          console.error('Error retrieving location:', err);
-          alert('Could not fetch your location. Please enable location services.');
-        }
-      );
-    } else {
-      alert('Geolocation is not supported by this browser.');
     }
   };
 
@@ -114,18 +97,16 @@ function FilterPage() {
               </select>
             </div>
 
-            <div className="filter-group">
-              <label>Your Location</label>
-              <div>
-                <input
-                  type="text"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder="Enter address or use current location"
-                />
-                <button type="button" onClick={getCurrentLocation}>Use My Location</button>
-              </div>
+          <div className="filter-group">
+            <label>Your Location</label>
+            <div>
+              {/* Use LocationSearch for Google AutoComplete*/}
+              <LocationSearch location={location} setLocation={setLocation} />
+
+              {/* Button to get current location */}
+              <CurrentLocationButton setLocation={setLocation} />
             </div>
+          </div>
 
             <div className="filter-group">
               <label>Search Radius</label>
