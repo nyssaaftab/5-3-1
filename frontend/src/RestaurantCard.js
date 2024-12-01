@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './RestaurantCard.css';
-import fallback from './fallback-image-url.png';
+//import fallback from './fallback-image-url.png';
 
 function RestaurantCard({ restaurant, onSelect, isSelected }) {
-  const [restaurantImage, setRestaurantImage] = useState(restaurant.image || fallback);
+  const [restaurantImage, setRestaurantImage] = useState(restaurant.image);
 
   useEffect(() => {
     const fetchRestaurantImage = async () => {
@@ -26,7 +26,7 @@ function RestaurantCard({ restaurant, onSelect, isSelected }) {
       } catch (error) {
         console.error('Error fetching restaurant image:', error);
         // Fallback to default image if fetch fails
-        setRestaurantImage(fallback);
+        //setRestaurantImage(fallback);
       }
     };
 
@@ -47,7 +47,7 @@ function RestaurantCard({ restaurant, onSelect, isSelected }) {
       <img
         src={restaurantImage}
         alt={restaurant.name || 'Restaurant'}
-        onError={() => setRestaurantImage(fallback)} // Additional error handling
+        //onError={() => setRestaurantImage(fallback)} // Additional error handling
       />
       <div className="overlay">
         <h2>{restaurant.name}</h2>

@@ -46,33 +46,3 @@
   color: white;
   margin-top: 5px;
 }
-
-.restaurant-results {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-}
-
-.restaurant-results > div {
-  flex: 0 0 calc(33.333% - 20px); /* Fixed width calculation */
-  max-width: calc(33.333% - 20px);
-  display: flex;
-  justify-content: center;
-}
-
-@media (max-width: 1200px) {
-  .restaurant-results > div {
-    flex: 0 0 calc(50% - 20px);
-    max-width: calc(50% - 20px);
-  }
-}
-
-@media (max-width: 768px) {
-  .restaurant-results > div {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-}
