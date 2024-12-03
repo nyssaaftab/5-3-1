@@ -71,14 +71,45 @@ public class GooglePlacesService {
 
         if (restaurants.isEmpty()) {
             return Collections.emptyList(); // Return an empty list if no restaurants found
-}
-
-        if (restaurants.size() > numRestaurants) {
-            return restaurants.subList(0, numRestaurants);
-        } else {
-            return restaurants;
         }
 
+        Set<String> seen = new HashSet<>();
+        List<Restaurant> unique = new ArrayList<>();
+        for (Restaurant restaurant : restaurants) {
+            if (seen.add(restaurant.getName())) {
+                unique.add(restaurant);
+            }
+            if (unique.size() == numRestaurants) {
+                break;
+            }
+        }
+
+        for (Restaurant r : unique) {
+            getDetails(r);
+        }
+
+        return unique;
+
     }
+
+    private void getDetails(Restaurant restaurant) throws JsonProcessingException {
+    String detailsUrl = String.format(
+        "https://maps.googleapis.com/maps/api/place/details/json?fields=editorial_summary,website,formatted_phone_number&place_id=%s&key=%s", 
+        restaurant.getID(), apiKey);
+
+    String detailsResponse = restTemplate.getForObject(detailsUrl, String.class);
+    JsonNode detailsRoot = objectMapper.readTree(detailsResponse);
+    JsonNode detailsResult = detailsRoot.path("result");
+
+    if (detailsResult.has("editorial_summary")) {
+        restaurant.setOverview(detailsResult.path("editorial_summary").path("overview").asText());
+    }
+    if (detailsResult.has("website")) {
+        restaurant.setWebsite(detailsResult.path("website").asText());
+    }
+    if (detailsResult.has("formatted_phone_number")) {
+        restaurant.setPhone(detailsResult.path("formatted_phone_number").asText());
+    }
+}    
 
 }
