@@ -1,31 +1,64 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './RestaurantCard.css';
+//import fallback from './fallback-image-url.png';
 
 function RestaurantCard({ restaurant, onSelect, isSelected }) {
+  const [restaurantImage, setRestaurantImage] = useState(restaurant.image);
+
+  useEffect(() => {
+    const fetchRestaurantImage = async () => {
+      try {
+        // Only fetch image if no image is already present
+        if (!restaurant.image) {
+          const response = await axios.get('http://localhost:8081/api/restaurant-images', {
+            params: {
+              restaurantName: restaurant.name,
+              location: restaurant.location // Ensure you pass location from backend
+            }
+          });
+
+          // If images are found, use the first one
+          if (response.data && response.data.length > 0) {
+            setRestaurantImage(response.data[0]);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching restaurant image:', error);
+        // Fallback to default image if fetch fails
+        //setRestaurantImage(fallback);
+      }
+    };
+
+    fetchRestaurantImage();
+  }, [restaurant]);
+
   const handleCardClick = () => {
     if (onSelect) {
-      onSelect(restaurant.id); // Call the function passed from the parent
-    } else {
-      console.error("onSelect function is not provided.");
+      onSelect(restaurant.id);
     }
   };
 
   return (
-    <div
+    <div 
       className={`restaurant-card ${isSelected ? 'selected' : ''}`}
       onClick={handleCardClick}
     >
       <img
-        src={restaurant.image || 'fallback-image-url.jpg'}
+        src={restaurantImage}
         alt={restaurant.name || 'Restaurant'}
+        //onError={() => setRestaurantImage(fallback)} // Additional error handling
       />
       <div className="overlay">
-        <h2>{restaurant.name || 'Unknown Restaurant'}</h2>
-        <p className="description">{restaurant.description || 'No description available'}</p>
+        <h2>{restaurant.name}</h2>
+        <p className="description">
+          {restaurant.rating ? `Rating: ${restaurant.rating}` : 'No rating available'}
+          <br/>
+          {restaurant.openNow ? '✓ Open Now' : '✗ Closed'}
+        </p>
       </div>
     </div>
   );
 }
-
 
 export default RestaurantCard;
