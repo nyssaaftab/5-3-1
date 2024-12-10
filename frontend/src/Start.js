@@ -3,7 +3,6 @@ import axios from 'axios';
 import RestaurantCard from './RestaurantCard';
 import LocationSearch from './LocationSearch.js'; // Import the LocationSearch component
 import CurrentLocationButton from './CurrentLocationButton'; // Import the CurrentLocationButton component
-import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 
 function FilterPage() {
   const [priceValue, setPriceValue] = useState(1);

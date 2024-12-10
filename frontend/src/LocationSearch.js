@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+import "./LocationSearch.css";
 
 const LocationSearch = ({ searchLocation, setSearchLocation }) => {
   // Function to handle when a location is selected from the dropdown
