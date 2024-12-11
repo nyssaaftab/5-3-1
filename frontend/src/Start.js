@@ -1,6 +1,6 @@
 import React, { useState} from 'react';
 import axios from 'axios';
-import RestaurantCard from './RestaurantCard';
+import RestaurantCard from './FilterRestaurantCard';
 import LocationSearch from './LocationSearch.js'; // Import the LocationSearch component
 import CurrentLocationButton from './CurrentLocationButton'; // Import the CurrentLocationButton component
 
