@@ -144,7 +144,21 @@ function FilterPage() {
               <div>Price: {"$".repeat(priceValue)}</div>
             </div>
 
-            <button type="submit">Generate Restaurants</button>
+            <button 
+              type="submit" 
+              style={{
+                padding: '10px',
+                color: 'black',
+                border: 'none',
+                cursor: 'pointer',
+                borderRadius: '5px',
+                width: 'auto',
+                margin: '0 auto',
+                marginTop: '20px',
+              }}
+            >
+              Generate Restaurants
+            </button>
           </form>
 
           <div className="restaurant-results">
@@ -166,6 +180,16 @@ function FilterPage() {
               <button 
                 onClick={submitSelection}
                 className="submit-button"
+                style={{
+                  padding: '10px',
+                  color: 'black',
+                  border: 'none',
+                  cursor: 'pointer',
+                  borderRadius: '5px',
+                  width: 'auto',
+                  margin: '0 auto',
+                  marginBottom: '20px',
+                }}
               >
                 Choose My Restaurant
               </button>

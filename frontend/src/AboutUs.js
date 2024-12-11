@@ -36,7 +36,7 @@ function AboutUs() {
               borderRadius: '5px',
               width: 'auto',
               margin: '0 auto',
-              marginBottom: '20px', // Adds space below
+              marginBottom: '20px',
             }}
           >
             Start Here!
