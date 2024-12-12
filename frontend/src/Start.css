@@ -1,7 +1,7 @@
 /* Start.css */
 .filter-group select {
     background-color: #f5f5f5; /* Light gray background */
-    color: #333; /* Dark text color */
+    color: rgb(21, 66, 40); /* Dark text color */
     border: 1px solid #ccc; /* Light border */
     border-radius: 5px; /* Rounded corners */
     padding: 10px; /* Add padding */
@@ -12,20 +12,20 @@
     margin-left: 10px;
   }
 
-
   .generate-button {
     padding: 10px;
-    color: black;
+    color: rgb(21, 66, 40);
     border: none;
     cursor: pointer;
     border-radius: 5px;
     width: auto;
-    margin: 20px auto 0; /* Combines top margin and horizontal centering */
+    margin: 20px auto 0; 
     display: block; /* Ensures the button is centered when margin is set to auto */
   }
 
   .generate-button:hover {
-    background-color: #36843a;
+    background-color: rgb(21, 66, 40);
+    color: white;
   }
 
   .generate-button.selected {
@@ -36,7 +36,7 @@
 
   .submit-button {
     padding: 10px;
-    color: black;
+    color: rgb(21, 66, 40);
     border: none;
     cursor: pointer;
     border-radius: 5px;
@@ -46,7 +46,8 @@
   }
 
   .submit-button:hover {
-    background-color: #36843a;
+    background-color: rgb(21, 66, 40);
+    color: white;
   }
 
   .submit-button.selected {
@@ -54,7 +55,12 @@
     font-weight: bold;  /* Optional: Make the text bold when selected */
     color: white;
   }
-  
+
+  .filter-group {
+    color: white;
+  }
+
+
 
 
 

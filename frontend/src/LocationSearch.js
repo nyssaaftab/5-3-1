@@ -3,6 +3,8 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import "./LocationSearch.css";
 
 const LocationSearch = ({ searchLocation, setSearchLocation }) => {
+  //get the formatted address
+  const [formattedAddress, setFormattedAddress] = useState('');
   // Function to handle when a location is selected from the dropdown
   const handleLocationSelect = async (value) => {
     if (value && value.value) {
@@ -19,9 +21,12 @@ const LocationSearch = ({ searchLocation, setSearchLocation }) => {
 
         if (data.status === "OK") {
           const { lat, lng } = data.result.geometry.location;
+          const address = data.result.formatted_address;
           console.log(lat);
           console.log(lng);
+          console.log(address);
           setSearchLocation(`${lat}, ${lng}`); // Update location in the desired format
+          setFormattedAddress(address);
         } else {
           console.error("Error fetching place details:", data.status);
         }
@@ -41,7 +46,7 @@ const LocationSearch = ({ searchLocation, setSearchLocation }) => {
           selectProps={{
             value: searchLocation ? { label: searchLocation, value: searchLocation } : null, // Set value of the input field
             onChange: handleLocationSelect, // Update location when a user selects an option
-            placeholder: "Enter Address Or Use Current Location", // Placeholder text
+            placeholder: formattedAddress || "Enter Address Or Use Current Location", // Placeholder text
           }}
         />
       </div>

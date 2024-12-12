@@ -4,6 +4,7 @@ import RestaurantCard from './FilterRestaurantCard';
 import LocationSearch from './LocationSearch.js'; // Import the LocationSearch component
 import CurrentLocationButton from './CurrentLocationButton'; // Import the CurrentLocationButton component
 import './Start.css'
+import './LocationSearch.css'
 
 function FilterPage() {
   const [priceValue, setPriceValue] = useState(1);
@@ -114,11 +115,10 @@ function FilterPage() {
             <div>
               {/* Use LocationSearch for Google AutoComplete*/}
               <LocationSearch searchLocation={searchLocation} setSearchLocation={setSearchLocation} />
-              
+              </div> 
               {/* Button to get current location */}
               <CurrentLocationButton setCurrLocation={setCurrLocation} setUseCurrLocation={setUseCurrLocation} />
             </div>
-          </div>
 
             <div className="filter-group">
               <label>Search Radius</label>

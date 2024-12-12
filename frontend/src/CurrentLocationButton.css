@@ -11,7 +11,8 @@
 }
 
 .current-location-button:hover {
-  background-color: #36843a;  /* Darker shade when hovered */
+  background-color: rgb(21, 66, 40);
+  color: white;
 }
 
 .current-location-button.selected {
@@ -21,5 +22,5 @@
 }
 
 .current-location-button.selected:hover {
-  background-color: #094d0c;  /* Darker shade when hovered */
+  background-color: rgb(21, 66, 40);  /* Darker shade when hovered */
 }
