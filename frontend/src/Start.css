@@ -1,0 +1,61 @@
+/* Start.css */
+.filter-group select {
+    background-color: #f5f5f5; /* Light gray background */
+    color: #333; /* Dark text color */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Add padding */
+    font-size: 16px; /* Increase font size */
+    cursor: pointer; /* Change cursor to pointer */
+    width: 50%; /* Full width */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    margin-left: 10px;
+  }
+
+
+  .generate-button {
+    padding: 10px;
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: auto;
+    margin: 20px auto 0; /* Combines top margin and horizontal centering */
+    display: block; /* Ensures the button is centered when margin is set to auto */
+  }
+
+  .generate-button:hover {
+    background-color: #36843a;
+  }
+
+  .generate-button.selected {
+    background-color: #106813; /* Darker green when selected */
+    font-weight: bold;  /* Optional: Make the text bold when selected */
+    color: white;
+  }
+
+  .submit-button {
+    padding: 10px;
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: auto;
+    margin: 20px auto 0; /* Combines top margin and horizontal centering */
+    display: block; /* Ensures the button is centered when margin is set to auto */
+  }
+
+  .submit-button:hover {
+    background-color: #36843a;
+  }
+
+  .submit-button.selected {
+    background-color: #106813; /* Darker green when selected */
+    font-weight: bold;  /* Optional: Make the text bold when selected */
+    color: white;
+  }
+  
+
+
+
+  

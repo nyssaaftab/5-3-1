@@ -3,6 +3,7 @@ import axios from 'axios';
 import RestaurantCard from './FilterRestaurantCard';
 import LocationSearch from './LocationSearch.js'; // Import the LocationSearch component
 import CurrentLocationButton from './CurrentLocationButton'; // Import the CurrentLocationButton component
+import './Start.css'
 
 function FilterPage() {
   const [priceValue, setPriceValue] = useState(1);
@@ -146,16 +147,7 @@ function FilterPage() {
 
             <button 
               type="submit" 
-              style={{
-                padding: '10px',
-                color: 'black',
-                border: 'none',
-                cursor: 'pointer',
-                borderRadius: '5px',
-                width: 'auto',
-                margin: '0 auto',
-                marginTop: '20px',
-              }}
+              className="generate-button"
             >
               Generate Restaurants
             </button>
@@ -180,16 +172,6 @@ function FilterPage() {
               <button 
                 onClick={submitSelection}
                 className="submit-button"
-                style={{
-                  padding: '10px',
-                  color: 'black',
-                  border: 'none',
-                  cursor: 'pointer',
-                  borderRadius: '5px',
-                  width: 'auto',
-                  margin: '0 auto',
-                  marginBottom: '20px',
-                }}
               >
                 Choose My Restaurant
               </button>

@@ -20,5 +20,8 @@ CMD ["java", "-jar", "app.jar"]
 # docker build -t backend-springboot .
 # docker run -d -p 8081:8080 backend-springboot
 
+# to run the application, in fivethreeone directory run:
+# ./mvnw spring-boot:run
+
 # when done run: 
 # docker stop 3e56942ba023
