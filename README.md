@@ -1,6 +1,6 @@
 # Team-5-3-1
 
-Introduction
+# Introduction
 
 What is the 5-3-1 restaurant picker? 
 
@@ -8,10 +8,10 @@ Our website 5-3-1 helps users find and choose restaurants. Given a location, sea
 
 For more details, view the full project proposal [here](https://docs.google.com/document/d/1jMbYF-eEGSsqXW_8F-txWdptcNTEeNfXWTZL4NA-CbA/edit?usp=sharing).
 
-Technical Architecture 
+# Technical Architecture 
 ![Technical Architecture Drawing](https://github.com/CS222-UIUC/Team-5-3-1/blob/new-branch/Screen%20Shot%202024-12-11%20at%209.23.45%20PM.png)
 
-Developers
+# Developers
 
 Nyssa Aftab - 
 
@@ -21,7 +21,8 @@ Nancy Wang -
 
 Elaina Xiao - Worked on frontend pages, restaurant cards, and filtering with backend
 
-Environment Setup
+# Environment Setup
+## Backend
 
 Set up API as environment variable
 
@@ -42,6 +43,8 @@ docker run -d -p 8081:8080 backend-springboot
 when done run: 
 
 docker stop 3e56942ba023
+
+## Frontend
 
 To start frontend navigate to your source directory and run
 
