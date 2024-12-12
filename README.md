@@ -9,7 +9,12 @@ Our website 5-3-1 helps users find and choose restaurants. Given a location, sea
 For more details, view the full project proposal [here](https://docs.google.com/document/d/1jMbYF-eEGSsqXW_8F-txWdptcNTEeNfXWTZL4NA-CbA/edit?usp=sharing).
 
 # Technical Architecture 
-![Technical Architecture Drawing](https://github.com/CS222-UIUC/Team-5-3-1/blob/new-branch/Screen%20Shot%202024-12-11%20at%209.23.45%20PM.png)
+
+## Backend 
+![Technical Architecture Drawing](https://github.com/CS222-UIUC/Team-5-3-1/blob/new-branch/back.png)
+
+## Frontend
+![Technical Architecture Drawing](https://github.com/CS222-UIUC/Team-5-3-1/blob/new-branch/front.png)
 
 # Developers
 
