@@ -22,7 +22,7 @@ Nyssa Aftab -
 
 Nat Gao -
 
-Nancy Wang - 
+Nancy Wang - Worked on setting up backend environment, basic backend functionality and testing, syncing frontend and backend, and location functionality
 
 Elaina Xiao - Worked on frontend pages, restaurant cards, and filtering with backend
 
