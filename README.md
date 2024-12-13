@@ -37,7 +37,7 @@ cd backend
 
 cd fivethreeone
 
-./mvnw clean package -DskipTests
+./mvnw clean 
 
 in backend directory run:
 
