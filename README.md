@@ -20,7 +20,7 @@ For more details, view the full project proposal [here](https://docs.google.com/
 
 Nyssa Aftab - Backend: setting up API key and cloud console, set up docker environment, developing and testing API
 
-Nat Gao - 
+Nat Gao - Implemented login and worked on design for frontend, maintained proper styling
 
 Nancy Wang - Worked on setting up backend environment, basic backend functionality and testing, syncing frontend and backend, and location functionality
 
