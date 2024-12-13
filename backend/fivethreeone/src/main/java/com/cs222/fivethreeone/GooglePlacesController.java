@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.Random;
 
+import org.springframework.http.ResponseEntity;
+
 
 @RestController
 @RequestMapping("/api/restaurants")
@@ -32,7 +34,7 @@ public class GooglePlacesController {
         return googlePlacesService.getPlaces(location, radius);
     }
 
-//http://localhost:8081/api/restaurants/random?location=40.10996616819772, -88.23113574620692&radius=1000&numRestaurants=5&priceLevel=2&cuisine=italian
+//http://localhost:8081/api/restaurants/random?location=40.10996616819772,-88.23113574620692&radius=1000&numRestaurants=5&priceLevel=2&cuisine=italian
     @GetMapping("/random")
     public List<Restaurant> getRandomRestaurants(
         @RequestParam(defaultValue = "40.1106,-88.2073") String location, // Default to latitude,longitude
@@ -41,6 +43,8 @@ public class GooglePlacesController {
         @RequestParam(required = false) Integer priceLevel,
         @RequestParam(required = false) String cuisine) 
         throws JsonMappingException, JsonProcessingException {
+        System.out.println("Controller Location: " + location);
+        System.out.println("Controller Radius: " + radius);
         return googlePlacesService.getRandomRestaurants(location, radius, priceLevel, cuisine, numRestaurants);
     }
 
@@ -61,5 +65,12 @@ public class GooglePlacesController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleIllegalArgumentException(IllegalArgumentException ex) {
             return ex.getMessage();
-        }
+    }
+
+    @GetMapping("/google-places")
+    public ResponseEntity<String> getPlaceDetails(@RequestParam String placeId) {
+        // Use the service to get place details
+        String placeDetails = googlePlacesService.getPlaceDetails(placeId);
+        return ResponseEntity.ok(placeDetails);
+    }
 }

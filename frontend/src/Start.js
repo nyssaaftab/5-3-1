@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 import RestaurantCard from './FilterRestaurantCard';
 import LocationSearch from './LocationSearch.js'; // Import the LocationSearch component
@@ -11,8 +11,8 @@ function FilterPage() {
   const [cuisineType, setCuisineType] = useState('all');
   const [restaurants, setRestaurants] = useState([]);
   const [cuisines, setCuisines] = useState(['Italian', 'Japanese', 'Mexican', 'Indian', 'American', 'Thai', 'Chinese']);
-  const [location, setLocation] = useState('');
-  const [searchLocation, setSearchLocation] = useState('');
+  //const [location, setLocation] = useState('');
+  const [searchLocation, setSearchLocation] = useState(''); // Initialize as an object
   const [currLocation, setCurrLocation] = useState('');
   const [useCurrLocation, setUseCurrLocation] = useState(false);
   const [radiusMiles, setRadiusMiles] = useState(0.5);
@@ -37,20 +37,22 @@ function FilterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const radiusInMeters = radiusMiles * 1609.34;
+
+    let loc = '';
     if (useCurrLocation && currLocation) {
-      setLocation(currLocation); // Use current location
+      loc = currLocation;
     } else if (searchLocation) {
-      setLocation(searchLocation); // Use search location
-    } else {
-      setLocation(""); // Reset if neither is valid
+      loc = searchLocation;
+      console.log("Using search location");
     }
-    
+
     try {
+      console.log("Sending location to backend:", loc);
       const response = await axios.get('http://localhost:8081/api/restaurants/random', {
         params: {
           cuisineType: cuisineType === 'all' ? '' : cuisineType,
           priceLevel: priceValue,
-          location: location,
+          location: loc,
           radius: radiusInMeters,
         },
       });

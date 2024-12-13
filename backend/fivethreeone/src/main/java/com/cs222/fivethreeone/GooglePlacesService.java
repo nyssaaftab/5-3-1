@@ -23,7 +23,6 @@ public class GooglePlacesService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
     
-
     public GooglePlacesService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -64,8 +63,9 @@ public class GooglePlacesService {
         JsonNode root = objectMapper.readTree(response);
         JsonNode results = root.path("results");
 
-        System.out.println("Requesting Google Places API: " + url); // Log the API URL
-        System.out.println("results: " + response);
+        //System.out.println("Requesting Google Places API: " + url); // Log the API URL
+        //System.out.println("Location:" + location); 
+       // System.out.println("results: " + response);
 
 
         List<Restaurant> restaurants = objectMapper.convertValue(results, new TypeReference<List<Restaurant>>() {});
@@ -112,6 +112,17 @@ public class GooglePlacesService {
     if (detailsResult.has("formatted_phone_number")) {
         restaurant.setPhone(detailsResult.path("formatted_phone_number").asText());
     }
-}    
+    }    
+
+    //For Location search
+    public String getPlaceDetails(String placeId) {
+        String url = String.format(
+            "https://maps.googleapis.com/maps/api/place/details/json?place_id=%s&key=%s", 
+            placeId, apiKey);
+            
+            System.out.println("Place ID:" + placeId);
+    
+        return restTemplate.getForObject(url, String.class);
+    }
 
 }
