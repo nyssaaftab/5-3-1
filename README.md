@@ -24,7 +24,7 @@ Nat Gao -
 
 Nancy Wang - Worked on setting up backend environment, basic backend functionality and testing, syncing frontend and backend, and location functionality
 
-Elaina Xiao - Worked on frontend pages, restaurant cards, and filtering with backend
+Elaina Xiao - Worked on frontend pages, restaurant cards, filtering with backend, and syncing frontend and backend
 
 # Environment Setup
 ## Backend
