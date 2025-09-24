@@ -50,7 +50,12 @@ const LocationSearch = ({ searchLocation, setSearchLocation }) => {
   return (
     <div className="location-search">
       <div>
-        <GooglePlacesAutocomplete
+        {(!process.env.REACT_APP_GOOGLE_MAPS_API_KEY) ? (
+          <div style={{ color: 'red', fontSize: '0.9rem' }}>
+            Google Maps API key is missing. Set REACT_APP_GOOGLE_MAPS_API_KEY in frontend/.env and restart the dev server.
+          </div>
+        ) : (
+          <GooglePlacesAutocomplete
           apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
           selectProps={{
             value: searchLocation ? { searchLocation } : null, // Set value of the input field
@@ -58,6 +63,7 @@ const LocationSearch = ({ searchLocation, setSearchLocation }) => {
             placeholder: formattedAddress || "Enter Address Or Use Current Location", // Placeholder text
           }}
         />
+        )}
       </div>
     </div>
   );
