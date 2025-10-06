@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import './CurrentLocationButton.css';
+import '../styles/CurrentLocationButton.css';
 
 const CurrentLocationButton = ({ setCurrLocation, setUseCurrLocation }) => {
   const [isSelected, setIsSelected] = useState(false); // Track the button's selected state

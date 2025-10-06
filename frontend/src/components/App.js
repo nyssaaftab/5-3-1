@@ -1,6 +1,6 @@
 //import logo from './road.webp';
-import star from './5star.webp';
-import './App.css';
+import star from '../assets/images/5star.webp';
+import '../styles/App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import React, { useState } from 'react'; 
 import { Link } from 'react-router-dom';

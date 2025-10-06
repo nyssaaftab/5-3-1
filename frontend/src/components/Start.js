@@ -3,8 +3,8 @@ import axios from 'axios';
 import RestaurantCard from './FilterRestaurantCard';
 import LocationSearch from './LocationSearch.js'; // Import the LocationSearch component
 import CurrentLocationButton from './CurrentLocationButton'; // Import the CurrentLocationButton component
-import './Start.css'
-import './LocationSearch.css'
+import '../styles/Start.css'
+import '../styles/LocationSearch.css'
 
 function FilterPage() {
   const [priceValue, setPriceValue] = useState(1);
@@ -16,6 +16,7 @@ function FilterPage() {
   const [currLocation, setCurrLocation] = useState('');
   const [useCurrLocation, setUseCurrLocation] = useState(false);
   const [radiusMiles, setRadiusMiles] = useState(0.5);
+  const [openNow, setOpenNow] = useState(true); // Default to true
   const [selectedRestaurants, setSelectedRestaurants] = useState([]);
   const [chosenRestaurant, setChosenRestaurant] = useState(null);
 
@@ -48,20 +49,31 @@ function FilterPage() {
 
     try {
       console.log("Sending location to backend:", loc);
+      console.log("Open Now setting:", openNow);
       const response = await axios.get('http://localhost:8081/api/restaurants/random', {
         params: {
           cuisineType: cuisineType === 'all' ? '' : cuisineType,
           priceLevel: priceValue,
           location: loc,
           radius: radiusInMeters,
+          openNow: openNow,
         },
       });
+      // Handle the new response format
+      const restaurants = response.data.restaurants || response.data;
+      const priceFallbackUsed = response.data.priceFallbackUsed || false;
+      const fallbackMessage = response.data.fallbackMessage || "";
+      
       // Add unique IDs to the restaurants
-      const restaurantsWithIds = response.data.map((restaurant, index) => ({
+      const restaurantsWithIds = restaurants.map((restaurant, index) => ({
         ...restaurant,
         id: `${restaurant.name}-${index}` // Create unique ID using name and index
       }));
       console.log("Restaurants with IDs:", restaurantsWithIds);
+      console.log("Price fallback used:", priceFallbackUsed);
+      if (priceFallbackUsed) {
+        console.log("Fallback message:", fallbackMessage);
+      }
       setRestaurants(restaurantsWithIds);
     } catch (error) {
       console.error('Error fetching restaurants:', error);
@@ -145,6 +157,17 @@ function FilterPage() {
                 onChange={(e) => setPriceValue(e.target.value)}
               />
               <div>Price: {"$".repeat(priceValue)}</div>
+            </div>
+
+            <div className="filter-group">
+              <label>
+                <input 
+                  type="checkbox" 
+                  checked={openNow}
+                  onChange={(e) => setOpenNow(e.target.checked)}
+                />
+                Only show restaurants open now
+              </label>
             </div>
 
             <button 

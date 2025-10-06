@@ -1,7 +1,7 @@
 import React from 'react';
-import './RestaurantCard.css';
+import '../styles/FilterRestaurantCard.css';
 
-function RestaurantCard({ restaurant, onSelect, isSelected }) {
+function FilterRestaurantCard({ restaurant, onSelect, isSelected }) {
   const handleCardClick = () => {
     if (onSelect) {
       onSelect(restaurant.id);
@@ -9,17 +9,15 @@ function RestaurantCard({ restaurant, onSelect, isSelected }) {
   };
 
   return (
-    <div
+    <div 
       className={`restaurant-card ${isSelected ? 'selected' : ''}`}
       onClick={handleCardClick}
     >
-      <img
-        src={restaurant.image || 'fallback-image-url.jpg'}
-        alt={restaurant.name || 'Restaurant'}
-      />
       <div className="overlay">
         <h2>{restaurant.name}</h2>
         <p className="description">
+          {restaurant.rating ? `Rating: ${restaurant.rating}` : 'No rating available'}
+          <br/>
           {restaurant.openNow ? '✓ Open Now' : '✗ Closed'}
         </p>
       </div>
@@ -27,5 +25,4 @@ function RestaurantCard({ restaurant, onSelect, isSelected }) {
   );
 }
 
-
-export default RestaurantCard;
+export default FilterRestaurantCard;

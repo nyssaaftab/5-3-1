@@ -1,8 +1,8 @@
 import React from 'react';
-import Nat from './nat.png';
-import Elaina from './elaina.jpg';
-import Nyssa from './nyssa.jpg';
-import Nancy from './nancy.jpg';
+// import Nat from './nat.png';
+// import Elaina from './elaina.jpg';
+// import Nyssa from './nyssa.jpg';
+// import Nancy from './nancy.jpg';
 import { Link } from 'react-router-dom';
 
 function AboutUs() {
@@ -13,12 +13,12 @@ function AboutUs() {
       <p>We use the 5-3-1 rule to narrow down your options, ensuring you always make a great choice!</p>
       <p>Our team consists of passionate food lovers from UIUC, dedicated to making your dining decisions easier.</p>
 
-      <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '20px' }}>
+      {/* <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '20px' }}>
         <img src={Nat} alt="Nat" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }} />
         <img src={Elaina} alt="Elaina" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }} />
         <img src={Nyssa} alt="Nyssa" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }} />
         <img src={Nancy} alt="Nancy" style={{ width: '150px', height: '150px', borderRadius: '50%', objectFit: 'cover' }} />
-      </div>
+      </div> */}
 
       <h1>What is 5-3-1?</h1>
       <p>According to the 5-3-1 rule, we will give you 5 of the best restaurants fitted to your personal taste,</p>

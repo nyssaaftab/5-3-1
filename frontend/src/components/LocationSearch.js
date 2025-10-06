@@ -1,14 +1,18 @@
 import React, {useState, useEffect} from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-import "./LocationSearch.css";
+import "../styles/LocationSearch.css";
 import axios from 'axios';
 
 const LocationSearch = ({ searchLocation, setSearchLocation }) => {
   //get the formatted address
   const [formattedAddress, setFormattedAddress] = useState('');
+  
+  // Debug: Log API key status
+  console.log('API Key loaded:', !!process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
+  console.log('API Key value:', process.env.REACT_APP_GOOGLE_MAPS_API_KEY?.substring(0, 10) + '...');
     // Handle place selection
     const handleLocationSelect = async (value) => {
-      if (value && value.value) {
+      if (value && value.value && value.value.place_id) {
         const placeId = value.value.place_id; // Get placeId from Autocomplete result
     
         console.log("Place selected");
@@ -38,7 +42,7 @@ const LocationSearch = ({ searchLocation, setSearchLocation }) => {
           console.error("Error fetching place details:", error);
         }
       } else {
-        console.log("Did not fetch data");
+        console.log("Did not fetch data - invalid value:", value);
       }
     };
 
@@ -61,6 +65,9 @@ const LocationSearch = ({ searchLocation, setSearchLocation }) => {
             value: searchLocation ? { searchLocation } : null, // Set value of the input field
             onChange: handleLocationSelect, // Update location when a user selects an option
             placeholder: formattedAddress || "Enter Address Or Use Current Location", // Placeholder text
+            isClearable: true,
+            noOptionsMessage: () => "No places found",
+            loadingMessage: () => "Loading places...",
           }}
         />
         )}
