@@ -1,8 +1,8 @@
 import React from 'react';
-// import Nat from './nat.png';
-// import Elaina from './elaina.jpg';
-// import Nyssa from './nyssa.jpg';
-// import Nancy from './nancy.jpg';
+// import Nat from '../assets/images/nat.png';
+// import Elaina from '../assets/images/elaina.jpg';
+// import Nyssa from '../assets/images/nyssa.jpg';
+// import Nancy from '../assets/images/nancy.jpg';
 import { Link } from 'react-router-dom';
 
 function AboutUs() {

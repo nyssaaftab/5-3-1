@@ -30,7 +30,7 @@ const CurrentLocationButton = ({ setCurrLocation, setUseCurrLocation }) => {
         alert("Geolocation is not supported by this browser.");
       }
     }
-  }, [isSelected, setCurrLocation]);
+  }, [isSelected, setCurrLocation, setUseCurrLocation]);
 
   return (
     <button

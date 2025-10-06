@@ -2,6 +2,7 @@ package com.cs222.fivethreeone;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.eq;
@@ -114,8 +115,8 @@ public class GooglePlacesControllerTest {
             new Restaurant("Taco Bell", "500m", "321 Green St"),
             new Restaurant("Canes", "1200m", "658 E Healey St")
         );
-        when(googlePlacesService.getRandomRestaurants(anyString(), anyString(), eq(2), anyString(), anyInt()))
-            .thenReturn(filteredRestaurants);
+        when(googlePlacesService.getRandomRestaurants(anyString(), anyString(), eq(2), anyString(), anyInt(), anyBoolean()))
+            .thenReturn(new RestaurantSearchResponse(filteredRestaurants, false, ""));
 
         mockMvc.perform(get("/api/restaurants/random")
             .param("location", "40.730610,-73.935242")

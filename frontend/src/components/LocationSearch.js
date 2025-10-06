@@ -6,17 +6,21 @@ import axios from 'axios';
 const LocationSearch = ({ searchLocation, setSearchLocation }) => {
   //get the formatted address
   const [formattedAddress, setFormattedAddress] = useState('');
-  
+  const [selectedPlace, setSelectedPlace] = useState(null);
+
   // Debug: Log API key status
   console.log('API Key loaded:', !!process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
   console.log('API Key value:', process.env.REACT_APP_GOOGLE_MAPS_API_KEY?.substring(0, 10) + '...');
     // Handle place selection
     const handleLocationSelect = async (value) => {
+      // Update the selected place for the autocomplete component
+      setSelectedPlace(value);
+
       if (value && value.value && value.value.place_id) {
         const placeId = value.value.place_id; // Get placeId from Autocomplete result
-    
+
         console.log("Place selected");
-    
+
         try {
           // Send placeId to Spring Boot backend to get place details
           console.log("Sending placeId to backend:", placeId);
@@ -25,12 +29,12 @@ const LocationSearch = ({ searchLocation, setSearchLocation }) => {
               placeId: placeId,
             },
           });
-    
+
           if (response.data.status === "OK") {
             //console.log(response.data.result);
             const { lat, lng } = response.data.result.geometry.location;
             const address = response.data.result.formatted_address;
-    
+
             // Set the location and formatted address
             setSearchLocation(`${lat},${lng}`);
             setFormattedAddress(address);
@@ -42,7 +46,10 @@ const LocationSearch = ({ searchLocation, setSearchLocation }) => {
           console.error("Error fetching place details:", error);
         }
       } else {
-        console.log("Did not fetch data - invalid value:", value);
+        // User cleared the selection
+        console.log("Selection cleared");
+        setSearchLocation('');
+        setFormattedAddress('');
       }
     };
 
@@ -62,7 +69,7 @@ const LocationSearch = ({ searchLocation, setSearchLocation }) => {
           <GooglePlacesAutocomplete
           apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
           selectProps={{
-            value: searchLocation ? { searchLocation } : null, // Set value of the input field
+            value: selectedPlace, // Set value of the input field
             onChange: handleLocationSelect, // Update location when a user selects an option
             placeholder: formattedAddress || "Enter Address Or Use Current Location", // Placeholder text
             isClearable: true,

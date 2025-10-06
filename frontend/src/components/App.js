@@ -8,7 +8,7 @@ import Login from './Login';
 import Restaurants from './Restaurants';
 import AboutUs from './AboutUs';
 import Start from './Start';
-import homelogo from './road.png';
+import homelogo from '../assets/images/road.png';
 //import { useNavigate } from 'react-router-dom';
 
 function App() {

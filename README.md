@@ -1,60 +1,91 @@
-# Team-5-3-1
+# 5-3-1 Restaurant Finder
 
-# Introduction
+A decision-making app that helps users find restaurants when they can't decide, using a "5-3-1" selection process.
 
-What is the 5-3-1 restaurant picker? 
+## Features
 
-Our website 5-3-1 helps users find and choose restaurants. Given a location, search radius, and restaurant-specific parameters, 5-3-1 randomly generates 5 restaurants. Users are prompted to select 3 restaurants. 5-3-1 then randomly picks 1 restaurant
+- **Smart Restaurant Filtering**: Find restaurants by cuisine, price level, and location
+- **Open Now Filter**: Option to show only currently open restaurants
+- **Price Fallback**: Automatically expands search to nearby price levels if not enough options found
+- **Google Places Integration**: Real-time restaurant data and location search
+- **5-3-1 Selection Process**: Users select 5 restaurants, narrow to 3, then get 1 random choice
 
-For more details, view the full project proposal [here](https://docs.google.com/document/d/1jMbYF-eEGSsqXW_8F-txWdptcNTEeNfXWTZL4NA-CbA/edit?usp=sharing).
+## Tech Stack
 
-# Technical Architecture 
+- **Frontend**: React, Google Places Autocomplete, Axios
+- **Backend**: Spring Boot, Google Places API
+- **Deployment**: Docker-ready
 
-## Backend 
-![Technical Architecture Drawing](https://github.com/CS222-UIUC/Team-5-3-1/blob/new-branch/back.png)
+## Project Structure
 
-## Frontend
-![Technical Architecture Drawing](https://github.com/CS222-UIUC/Team-5-3-1/blob/new-branch/front.png)
+```
+├── backend/                 # Spring Boot API
+│   ├── src/main/java/      # Java source code
+│   ├── src/main/resources/ # Configuration files
+│   ├── src/test/           # Test files
+│   ├── pom.xml            # Maven dependencies
+│   └── Dockerfile         # Container configuration
+├── frontend/               # React application
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── styles/        # CSS files
+│   │   └── assets/        # Images and icons
+│   ├── public/            # Static assets
+│   └── package.json       # Node dependencies
+├── assets/                # Project assets
+│   └── images/           # Screenshots and documentation images
+└── docs/                 # Documentation
+```
 
-# Developers
+## Getting Started
 
-Nyssa Aftab - Backend: setting up API key and cloud console, set up docker environment, developing and testing API
+### Prerequisites
 
-Nat Gao - Implemented login and worked on design for frontend, maintained proper styling
+- Java 21+
+- Node.js 16+
+- Google Cloud API key with Places API enabled
 
-Nancy Wang - Worked on setting up backend environment, basic backend functionality and testing, syncing frontend and backend, and location functionality
+### Backend Setup
 
-Elaina Xiao - Worked on frontend pages, restaurant cards, filtering with backend, and syncing frontend and backend
+1. Create `backend/.env` with your Google API key:
+   ```
+   GOOGLE_API_KEY=your_api_key_here
+   ```
 
-# Environment Setup
-## Backend
+2. Run the backend:
+   ```bash
+   cd backend
+   ./mvnw spring-boot:run
+   ```
 
-Set up API as environment variable
+### Frontend Setup
 
-Navigate to your source directory run the following command
+1. Create `frontend/.env` with your Google API key:
+   ```
+   REACT_APP_GOOGLE_MAPS_API_KEY=your_api_key_here
+   ```
 
-cd backend
+2. Install dependencies and start:
+   ```bash
+   cd frontend
+   npm install
+   npm start
+   ```
 
-cd fivethreeone
+## API Endpoints
 
-./mvnw clean 
+- `GET /api/restaurants/random` - Get random restaurants with filters
+- `GET /api/restaurants/google-places` - Get place details by ID
+- `POST /api/restaurants/select` - Select final restaurant from choices
 
-in backend directory run:
+## Environment Variables
 
-docker build -t backend-springboot .
+### Backend
+- `GOOGLE_API_KEY` - Google Places API key for server-side requests
 
-docker run -d -p 8081:8080 backend-springboot
+### Frontend
+- `REACT_APP_GOOGLE_MAPS_API_KEY` - Google Maps API key for client-side autocomplete
 
-when done run: 
+## License
 
-docker stop 3e56942ba023
-
-## Frontend
-
-To start frontend navigate to your source directory and run
-
-cd frontend
-
-npm install if not installed already
-
-npm start
+This project is for portfolio purposes.

@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import RestaurantCard from './FilterRestaurantCard';
 import LocationSearch from './LocationSearch.js'; // Import the LocationSearch component
@@ -10,7 +10,7 @@ function FilterPage() {
   const [priceValue, setPriceValue] = useState(1);
   const [cuisineType, setCuisineType] = useState('all');
   const [restaurants, setRestaurants] = useState([]);
-  const [cuisines, setCuisines] = useState(['Italian', 'Japanese', 'Mexican', 'Indian', 'American', 'Thai', 'Chinese']);
+  const [cuisines] = useState(['Italian', 'Japanese', 'Mexican', 'Indian', 'American', 'Thai', 'Chinese']);
   //const [location, setLocation] = useState('');
   const [searchLocation, setSearchLocation] = useState(''); // Initialize as an object
   const [currLocation, setCurrLocation] = useState('');

@@ -1,1 +1,16 @@
 .DS_Store 
+frontend/.env
+backend/.env
+
+# Build outputs
+backend/target/
+frontend/build/
+frontend/node_modules/
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# OS files
+Thumbs.db
