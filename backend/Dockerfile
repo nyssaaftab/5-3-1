@@ -1,27 +1,35 @@
-FROM openjdk:21-jdk-slim
+# Multi-stage build for efficient deployment
+FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
-COPY fivethreeone/mvnw .
-COPY fivethreeone/.mvn ./.mvn
+# Copy Maven files
+COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw .
 
-COPY fivethreeone/target/fivethreeone-0.0.1-SNAPSHOT.jar app.jar
+# Make mvnw executable
+RUN chmod +x mvnw
 
+# Download dependencies (cached layer)
+RUN ./mvnw dependency:go-offline
+
+# Copy source code
+COPY src ./src
+
+# Build the application
+RUN ./mvnw clean package -DskipTests
+
+# Runtime stage
+FROM eclipse-temurin:21-jre-jammy
+
+WORKDIR /app
+
+# Copy the built jar from build stage
+COPY --from=build /app/target/fivethreeone-0.0.1-SNAPSHOT.jar app.jar
+
+# Expose port 8081
 EXPOSE 8081
 
+# Run the application
 CMD ["java", "-jar", "app.jar"]
-
-# set up API as environment variable
-
-# in fivethree one directiory run: 
-# ./mvnw clean package -DskipTests
-
-# in backend directory run:
-# docker build -t backend-springboot .
-# docker run -d -p 8081:8080 backend-springboot
-
-# to run the application, in fivethreeone directory run:
-# ./mvnw spring-boot:run
-
-# when done run: 
-# docker stop 3e56942ba023
