@@ -22,6 +22,7 @@ function FilterPage() {
   const [chosenRestaurant, setChosenRestaurant] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [checkNumber] = useState(() => Math.floor(100000 + Math.random() * 900000));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -147,18 +148,34 @@ function FilterPage() {
   // Step 0: No restaurants yet - show search form
   if (!chosenRestaurant && restaurants.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-4">
-        <div className="max-w-3xl w-full bg-white rounded-3xl shadow-2xl p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-5xl font-bold text-gray-800 mb-2">5-3-1</h1>
-            <p className="text-gray-600 text-lg">Take a chance and find your new favorite spot!</p>
+      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="max-w-3xl w-full bg-green-50 border-l-4 border-r-4 border-blue-900 shadow-2xl">
+          {/* Guest Check Header */}
+          <div className="border-b-4 border-blue-900 p-4 bg-green-50">
+            <div className="grid grid-cols-3 gap-2 text-xs text-blue-900 mb-2">
+              <span>CHECK #{checkNumber}</span>
+              <span className="text-center">TABLE 1</span>
+              <span className="text-right">SERVER: 5-3-1</span>
+            </div>
+            <h1 className="text-5xl font-bold text-blue-900 text-center mb-2" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+              GUEST CHECK
+            </h1>
+            <div className="grid grid-cols-3 gap-2 text-xs text-blue-900">
+              <span>CHECK #{checkNumber}</span>
+              <span className="text-center">GUESTS: 1</span>
+              <span className="text-right">DATE: {new Date().toLocaleDateString()}</span>
+            </div>
           </div>
+
+          <div className="p-8 bg-green-50">
+            <div className="text-center mb-8">
+              <p className="text-gray-600 text-lg">Take a chance and find your new favorite spot!</p>
+            </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <MapPin className="inline w-4 h-4 mr-1" />
-                Your Location
+              <label className="block text-sm font-semibold text-blue-900 mb-2">
+                YOUR LOCATION
               </label>
               <div className="space-y-2">
                 <LocationSearch
@@ -175,9 +192,8 @@ function FilterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Navigation className="inline w-4 h-4 mr-1" />
-                Search Radius: {radiusMiles.toFixed(1)} miles
+              <label className="block text-sm font-semibold text-blue-900 mb-2">
+                SEARCH RADIUS: {radiusMiles.toFixed(1)} miles
               </label>
               <input
                 type="range"
@@ -186,16 +202,16 @@ function FilterPage() {
                 step="0.1"
                 value={radiusMiles}
                 onChange={(e) => setRadiusMiles(parseFloat(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-900"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Cuisine Type
+              <label className="block text-sm font-semibold text-blue-900 mb-2">
+                CUISINE TYPE
               </label>
               <select
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:border-transparent"
                 value={cuisineType}
                 onChange={(e) => setCuisineType(e.target.value)}
               >
@@ -209,9 +225,8 @@ function FilterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <DollarSign className="inline w-4 h-4 mr-1" />
-                Max Price: {'$'.repeat(maxPrice)}
+              <label className="block text-sm font-semibold text-blue-900 mb-2">
+                MAX PRICE: {'$'.repeat(maxPrice)}
               </label>
               <input
                 type="range"
@@ -220,7 +235,7 @@ function FilterPage() {
                 step="1"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-900"
               />
               <div className="flex justify-between text-xs text-gray-500 mt-1">
                 <span>$</span>
@@ -236,7 +251,7 @@ function FilterPage() {
                 id="openNow"
                 checked={openNow}
                 onChange={(e) => setOpenNow(e.target.checked)}
-                className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                className="w-4 h-4 text-blue-900 border-gray-300 rounded focus:ring-blue-900"
               />
               <label htmlFor="openNow" className="ml-2 text-sm text-gray-700">
                 Only show restaurants open now
@@ -252,10 +267,10 @@ function FilterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full py-4 rounded-xl font-semibold text-lg shadow-lg transition-all ${
+              className={`w-full py-4 font-semibold text-lg transition-all ${
                 isLoading
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:shadow-xl hover:scale-105'
+                  : 'bg-blue-900 text-white hover:bg-blue-800'
               }`}
             >
               {isLoading ? 'Loading...' : 'Find 5 Restaurants'}
@@ -264,10 +279,16 @@ function FilterPage() {
 
           {isLoading && (
             <div className="mt-6 text-center">
-              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-orange-500 border-r-transparent"></div>
+              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-900 border-r-transparent"></div>
               <p className="mt-2 text-gray-600">Finding restaurants...</p>
             </div>
           )}
+          </div>
+
+          {/* Guest Check Footer */}
+          <div className="border-t-4 border-blue-900 p-4 text-center bg-green-50">
+            <p className="text-sm text-blue-900 font-semibold">THANK YOU - PLEASE COME AGAIN</p>
+          </div>
         </div>
       </div>
     );
@@ -276,27 +297,33 @@ function FilterPage() {
   // Step 1: Select 3 from 5
   if (!chosenRestaurant && restaurants.length > 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 p-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <span className="text-6xl font-bold text-orange-500">5</span>
-              <span className="text-4xl text-gray-400">→</span>
-              <span className="text-4xl font-bold text-gray-300">3</span>
-              <span className="text-4xl text-gray-400">→</span>
-              <span className="text-4xl font-bold text-gray-300">1</span>
+      <div className="min-h-screen bg-white flex items-center justify-center p-8">
+        <div className="max-w-4xl w-full bg-green-50 border-l-4 border-r-4 border-blue-900 shadow-2xl">
+          {/* Guest Check Header */}
+          <div className="border-b-4 border-blue-900 p-4 bg-green-50">
+            <div className="grid grid-cols-3 gap-2 text-xs text-blue-900 mb-2">
+              <span>CHECK #{checkNumber}</span>
+              <span className="text-center">TABLE 1</span>
+              <span className="text-right">SERVER: 5-3-1</span>
             </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">Choose Your Top 3</h2>
-            <p className="text-gray-600">Selected: {selectedRestaurants.length}/3</p>
+            <h1 className="text-4xl font-bold text-blue-900 text-center mb-2" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+              SELECT YOUR TOP 3
+            </h1>
+            <div className="grid grid-cols-3 gap-2 text-xs text-blue-900">
+              <span>ITEMS: 5</span>
+              <span className="text-center">SELECTED: {selectedRestaurants.length}/3</span>
+              <span className="text-right">DATE: {new Date().toLocaleDateString()}</span>
+            </div>
           </div>
 
+          <div className="p-6 bg-green-50">
           {error && (
-            <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 text-orange-700 text-sm mb-6 max-w-md mx-auto text-center">
+            <div className="bg-red-50 border-2 border-red-600 p-3 text-red-700 text-sm mb-4 text-center">
               {error}
             </div>
           )}
 
-          <div className="flex flex-wrap justify-center gap-6 mb-8 max-w-5xl mx-auto">
+          <div className="space-y-3 mb-6">
             {restaurants.map((restaurant) => (
               <RestaurantCard
                 key={restaurant.id}
@@ -307,24 +334,32 @@ function FilterPage() {
             ))}
           </div>
 
-          <div className="flex gap-4 justify-center">
-            <button
-              onClick={reset}
-              className="px-8 py-3 bg-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-400 transition-colors"
-            >
-              Start Over
-            </button>
-            <button
-              onClick={submitSelection}
-              disabled={selectedRestaurants.length !== 3}
-              className={`px-8 py-3 rounded-xl font-semibold transition-all ${
-                selectedRestaurants.length === 3
-                  ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:shadow-xl hover:scale-105'
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              }`}
-            >
-              Pick My Restaurant!
-            </button>
+          <div className="border-t-2 border-blue-900 pt-4 mt-4 bg-green-50">
+            <div className="flex gap-4 justify-center mb-4">
+              <button
+                onClick={reset}
+                className="px-8 py-3 bg-white border-2 border-blue-900 text-blue-900 font-semibold hover:bg-blue-50 transition-colors"
+              >
+                Start Over
+              </button>
+              <button
+                onClick={submitSelection}
+                disabled={selectedRestaurants.length !== 3}
+                className={`px-8 py-3 font-semibold transition-all ${
+                  selectedRestaurants.length === 3
+                    ? 'bg-blue-900 text-white hover:bg-blue-800'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                }`}
+              >
+                Pick My Restaurant!
+              </button>
+            </div>
+          </div>
+          </div>
+
+          {/* Guest Check Footer */}
+          <div className="border-t-4 border-blue-900 p-4 text-center bg-green-50">
+            <p className="text-sm text-blue-900 font-semibold">THANK YOU - PLEASE COME AGAIN</p>
           </div>
         </div>
       </div>
@@ -334,22 +369,33 @@ function FilterPage() {
   // Step 2: Final Pick
   if (chosenRestaurant) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-8">
-        <div className="max-w-2xl w-full">
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <span className="text-4xl font-bold text-gray-300">5</span>
-              <span className="text-4xl text-gray-400">→</span>
-              <span className="text-4xl font-bold text-gray-300">3</span>
-              <span className="text-4xl text-gray-400">→</span>
-              <span className="text-6xl font-bold text-orange-500">1</span>
-            </div>
-            <h2 className="text-4xl font-bold text-gray-800 mb-2">You're Going To...</h2>
+      <div className="min-h-screen bg-white flex items-center justify-center p-8">
+        <div className="max-w-3xl w-full bg-green-50 border-l-4 border-r-4 border-blue-900 shadow-2xl relative">
+          {/* PAID Stamp */}
+          <div className="absolute top-24 right-8 border-4 border-red-600 text-red-600 font-black text-4xl px-8 py-3 opacity-70 z-10" style={{ transform: 'rotate(-15deg)' }}>
+            PAID
           </div>
 
-          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+          {/* Guest Check Header */}
+          <div className="border-b-4 border-blue-900 p-4 bg-green-50">
+            <div className="grid grid-cols-3 gap-2 text-xs text-blue-900 mb-2">
+              <span>CHECK #{checkNumber}</span>
+              <span className="text-center">TABLE 1</span>
+              <span className="text-right">SERVER: 5-3-1</span>
+            </div>
+            <h1 className="text-4xl font-bold text-blue-900 text-center mb-2" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+              YOUR SELECTION
+            </h1>
+            <div className="grid grid-cols-3 gap-2 text-xs text-blue-900">
+              <span>GUESTS: 1</span>
+              <span className="text-center">FINAL PICK</span>
+              <span className="text-right">DATE: {new Date().toLocaleDateString()}</span>
+            </div>
+          </div>
+
+          <div className="p-8 bg-green-50">
             {chosenRestaurant.photoUrl && (
-              <div className="h-64 overflow-hidden">
+              <div className="h-48 overflow-hidden mb-6 border-2 border-blue-900">
                 <img
                   src={chosenRestaurant.photoUrl}
                   alt={chosenRestaurant.name}
@@ -357,9 +403,16 @@ function FilterPage() {
                 />
               </div>
             )}
-            <div className="p-12 text-center">
-              <h3 className="text-4xl font-bold text-gray-800 mb-4">{chosenRestaurant.name}</h3>
-              <p className="text-xl text-gray-600 mb-6">{chosenRestaurant.address || chosenRestaurant.vicinity}</p>
+
+            {/* Restaurant Name in Handwritten Style */}
+            <div className="text-center mb-6">
+              <h3 className="text-5xl font-bold text-blue-900 mb-3" style={{ fontFamily: 'Brush Script MT, cursive', transform: 'rotate(-2deg)' }}>
+                {chosenRestaurant.name}
+              </h3>
+              <p className="text-lg text-gray-700">{chosenRestaurant.address || chosenRestaurant.vicinity}</p>
+            </div>
+
+            <div className="text-center mb-6">
               <div className="flex items-center justify-center gap-8 text-lg text-gray-500 mb-8">
                 {chosenRestaurant.rating && (
                   <span className="flex items-center">
@@ -377,7 +430,7 @@ function FilterPage() {
               {chosenRestaurant.opening_hours && (
                 <div className="mb-6">
                   <div className={`text-lg font-semibold mb-2 ${chosenRestaurant.opening_hours.open_now ? 'text-green-600' : 'text-red-600'}`}>
-                    {chosenRestaurant.opening_hours.open_now ? '✓ Open Now' : '✗ Closed'}
+                    {chosenRestaurant.opening_hours.open_now ? 'Open Now' : 'Closed'}
                   </div>
                   {chosenRestaurant.opening_hours.weekday_text && chosenRestaurant.opening_hours.weekday_text.length > 0 && (
                     <div className="text-left max-w-md mx-auto bg-gray-50 rounded-xl p-4">
@@ -396,7 +449,7 @@ function FilterPage() {
                   href={chosenRestaurant.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block px-8 py-3 bg-orange-500 text-white rounded-xl font-semibold mr-4 hover:bg-orange-600 transition-colors"
+                  className="inline-block px-6 py-2 bg-blue-900 text-white font-semibold mr-4 hover:bg-blue-800 transition-colors"
                 >
                   Visit Website
                 </a>
@@ -404,21 +457,36 @@ function FilterPage() {
               {chosenRestaurant.phone && (
                 <a
                   href={`tel:${chosenRestaurant.phone}`}
-                  className="inline-block px-8 py-3 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-600 transition-colors"
+                  className="inline-block px-6 py-2 bg-blue-900 text-white font-semibold hover:bg-blue-800 transition-colors"
                 >
                   {chosenRestaurant.phone}
                 </a>
               )}
             </div>
+
+            {/* Totals Grid Section */}
+            <div className="border-t-2 border-blue-900 pt-4 mt-6">
+              <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+                <div className="text-left font-semibold text-blue-900">SUBTOTAL:</div>
+                <div className="text-right">1 Restaurant</div>
+                <div className="text-left font-semibold text-blue-900">TAX:</div>
+                <div className="text-right">Fun</div>
+                <div className="text-left text-lg font-black text-blue-900">TOTAL:</div>
+                <div className="text-right text-lg font-black">Great Experience!</div>
+              </div>
+
+              <button
+                onClick={reset}
+                className="w-full py-3 bg-blue-900 text-white font-semibold text-lg hover:bg-blue-800 transition-colors"
+              >
+                Pick Again
+              </button>
+            </div>
           </div>
 
-          <div className="text-center mt-8">
-            <button
-              onClick={reset}
-              className="px-12 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
-            >
-              Pick Again
-            </button>
+          {/* Guest Check Footer */}
+          <div className="border-t-4 border-blue-900 p-4 text-center">
+            <p className="text-sm text-blue-900 font-semibold">THANK YOU - PLEASE COME AGAIN</p>
           </div>
         </div>
       </div>

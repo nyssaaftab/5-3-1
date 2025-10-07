@@ -13,8 +13,9 @@ import homelogo from '../assets/images/road.png';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
+  const [checkNumber] = useState(() => Math.floor(100000 + Math.random() * 900000));
   //const navigate = useNavigate();
- 
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -26,16 +27,39 @@ function App() {
           <Route
             path="/"
             element={
-              <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-4">
-                <div className="text-center">
-                  <h1 className="text-7xl font-bold text-gray-800 mb-4">5-3-1</h1>
-                  <p className="text-xl text-gray-600 mb-8">Can't decide where to eat? We'll help! Enter your location and preferences, and we'll show you 5 random restaurants. Pick your top 3 favorites, then let us choose 1 for you. No more dinner debates—just great food.</p>
-                  <Link
-                    to="/start"
-                    className="inline-block px-12 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
-                  >
-                    Get Started
-                  </Link>
+              <div className="min-h-screen bg-white flex items-center justify-center p-4">
+                <div className="max-w-3xl w-full bg-green-50 border-l-4 border-r-4 border-blue-900 shadow-2xl">
+                  {/* Guest Check Header */}
+                  <div className="border-b-4 border-blue-900 p-4 bg-green-50">
+                    <div className="grid grid-cols-3 gap-2 text-xs text-blue-900 mb-2">
+                      <span>CHECK #{checkNumber}</span>
+                      <span className="text-center">WELCOME</span>
+                      <span className="text-right">SERVER: 5-3-1</span>
+                    </div>
+                    <h1 className="text-6xl font-bold text-blue-900 text-center mb-2" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
+                      5-3-1
+                    </h1>
+                    <div className="grid grid-cols-3 gap-2 text-xs text-blue-900">
+                      <span>PARTY SIZE: ANY</span>
+                      <span className="text-center">CUISINE: ALL</span>
+                      <span className="text-right">DATE: {new Date().toLocaleDateString()}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-8 text-center bg-green-50">
+                    <p className="text-xl text-gray-700 mb-8 leading-relaxed">Can't decide where to eat? We'll help! Enter your location and preferences, and we'll show you 5 random restaurants. Pick your top 3 favorites, then let us choose 1 for you. No more dinner debates—just great food.</p>
+                    <Link
+                      to="/start"
+                      className="inline-block px-12 py-4 bg-blue-900 text-white font-semibold text-lg hover:bg-blue-800 transition-colors"
+                    >
+                      Get Started
+                    </Link>
+                  </div>
+
+                  {/* Guest Check Footer */}
+                  <div className="border-t-4 border-blue-900 p-4 text-center bg-green-50">
+                    <p className="text-sm text-blue-900 font-semibold">THANK YOU - PLEASE COME AGAIN</p>
+                  </div>
                 </div>
               </div>
             }
