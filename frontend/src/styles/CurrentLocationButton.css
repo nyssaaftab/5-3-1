@@ -11,16 +11,16 @@
 }
 
 .current-location-button:hover {
-  background-color: rgb(21, 66, 40);
+  background-color: #f97316;  /* Orange hover */
   color: white;
 }
 
 .current-location-button.selected {
-  background-color: #106813; /* Darker green when selected */
+  background-color: #f97316; /* Orange when selected */
   font-weight: bold;  /* Optional: Make the text bold when selected */
   color: white;
 }
 
 .current-location-button.selected:hover {
-  background-color: rgb(21, 66, 40);  /* Darker shade when hovered */
+  background-color: #ea580c;  /* Darker orange when hovered */
 }

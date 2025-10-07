@@ -16,7 +16,7 @@ function FilterRestaurantCard({ restaurant, onSelect, isSelected }) {
   return (
     <div
       onClick={handleCardClick}
-      className={`bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all hover:scale-105 ${
+      className={`w-64 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all hover:scale-105 ${
         isSelected ? 'ring-4 ring-orange-500' : ''
       }`}
     >

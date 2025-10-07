@@ -3,7 +3,7 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import "../styles/LocationSearch.css";
 import axios from 'axios';
 
-const LocationSearch = ({ searchLocation, setSearchLocation }) => {
+const LocationSearch = ({ searchLocation, setSearchLocation, setUseCurrLocation }) => {
   //get the formatted address
   const [formattedAddress, setFormattedAddress] = useState('');
   const [selectedPlace, setSelectedPlace] = useState(null);
@@ -38,6 +38,7 @@ const LocationSearch = ({ searchLocation, setSearchLocation }) => {
             // Set the location and formatted address
             setSearchLocation(`${lat},${lng}`);
             setFormattedAddress(address);
+            setUseCurrLocation(false); // Clear current location flag when manually selecting an address
             console.log("Address: ", address);
           } else {
             console.error("Error fetching place details:", response.data.status);
@@ -56,6 +57,12 @@ const LocationSearch = ({ searchLocation, setSearchLocation }) => {
      // Log whenever searchLocation changes
      useEffect(() => {
       console.log("Search location has changed:", searchLocation);
+
+      // If searchLocation is reset to default UIUC coordinates, clear the display
+      if (searchLocation === '40.1106,-88.2073') {
+        setFormattedAddress('');
+        setSelectedPlace(null);
+      }
     }, [searchLocation]); // Dependency on searchLocation means this effect runs when searchLocation changes
   
   return (
@@ -71,7 +78,7 @@ const LocationSearch = ({ searchLocation, setSearchLocation }) => {
           selectProps={{
             value: selectedPlace, // Set value of the input field
             onChange: handleLocationSelect, // Update location when a user selects an option
-            placeholder: formattedAddress || "Enter Address Or Use Current Location", // Placeholder text
+            placeholder: formattedAddress || "Search for location (defaults to UIUC campus)", // Placeholder text
             isClearable: true,
             noOptionsMessage: () => "No places found",
             loadingMessage: () => "Loading places...",

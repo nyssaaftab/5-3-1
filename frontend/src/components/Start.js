@@ -62,6 +62,12 @@ function FilterPage() {
         return;
       }
 
+      if (restaurants.length < 5) {
+        setError(`Only found ${restaurants.length} restaurants. Please expand your search radius or change your filters to find at least 5 restaurants.`);
+        setRestaurants([]);
+        return;
+      }
+
       const restaurantsWithIds = restaurants.map((restaurant, index) => ({
         ...restaurant,
         id: `${restaurant.name}-${index}`
@@ -121,6 +127,9 @@ function FilterPage() {
     setSelectedRestaurants([]);
     setChosenRestaurant(null);
     setError(null);
+    setSearchLocation('40.1106,-88.2073');
+    setCurrLocation('');
+    setUseCurrLocation(false);
   };
 
   const renderPriceLevel = (level) => {
@@ -145,8 +154,8 @@ function FilterPage() {
                 Your Location
               </label>
               <div className="space-y-2">
-                <LocationSearch searchLocation={searchLocation} setSearchLocation={setSearchLocation} />
-                <CurrentLocationButton setCurrLocation={setCurrLocation} setUseCurrLocation={setUseCurrLocation} />
+                <LocationSearch searchLocation={searchLocation} setSearchLocation={setSearchLocation} setUseCurrLocation={setUseCurrLocation} />
+                <CurrentLocationButton setCurrLocation={setCurrLocation} setUseCurrLocation={setUseCurrLocation} useCurrLocation={useCurrLocation} />
               </div>
             </div>
 
@@ -266,7 +275,7 @@ function FilterPage() {
             <p className="text-gray-600">Selected: {selectedRestaurants.length}/3</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+          <div className="flex flex-wrap justify-center gap-6 mb-8 max-w-5xl mx-auto">
             {restaurants.map((restaurant) => (
               <RestaurantCard
                 key={restaurant.id}

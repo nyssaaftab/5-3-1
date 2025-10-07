@@ -1,13 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import '../styles/CurrentLocationButton.css';
 
-const CurrentLocationButton = ({ setCurrLocation, setUseCurrLocation }) => {
-  const [isSelected, setIsSelected] = useState(false); // Track the button's selected state
-  
+const CurrentLocationButton = ({ setCurrLocation, setUseCurrLocation, useCurrLocation }) => {
+
   const handleLocationClick = useCallback((e) => {
-    if (isSelected) {
+    if (useCurrLocation) {
       // If already selected, deselect the button and reset location
-      setIsSelected(false);
       setCurrLocation(null);  // Clear the location (or set it to a default value)
       setUseCurrLocation(false); // Flip using current location flag
     } else {
@@ -19,7 +17,6 @@ const CurrentLocationButton = ({ setCurrLocation, setUseCurrLocation }) => {
             const lon = position.coords.longitude;
             const location = `${lat}, ${lon}`;
             setCurrLocation(location);
-            setIsSelected(true); // Mark the button as selected
             setUseCurrLocation(true); //Flip using current location flag to true
           },
           (error) => {
@@ -30,15 +27,15 @@ const CurrentLocationButton = ({ setCurrLocation, setUseCurrLocation }) => {
         alert("Geolocation is not supported by this browser.");
       }
     }
-  }, [isSelected, setCurrLocation, setUseCurrLocation]);
+  }, [useCurrLocation, setCurrLocation, setUseCurrLocation]);
 
   return (
     <button
-      type="button" 
-      className={`current-location-button ${isSelected ? "selected" : ""}`}
+      type="button"
+      className={`current-location-button ${useCurrLocation ? "selected" : ""}`}
       onClick={handleLocationClick}
     >
-      {isSelected ? "Using Current Location" : "Use My Current Location"}
+      {useCurrLocation ? "Using Current Location" : "Use My Current Location"}
     </button>
   );
 };

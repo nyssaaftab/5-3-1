@@ -60,8 +60,20 @@
     color: white;
   }
 
+  .generate-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
 
+  .generate-button:disabled:hover {
+    background-color: #ccc;
+    color: rgb(21, 66, 40);
+  }
 
-
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 
   

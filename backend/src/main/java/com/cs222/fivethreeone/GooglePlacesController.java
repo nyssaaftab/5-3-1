@@ -49,6 +49,7 @@ public class GooglePlacesController {
         System.out.println("Controller Radius: " + radius);
         System.out.println("Controller Min Price: " + minPrice);
         System.out.println("Controller Max Price: " + maxPrice);
+        System.out.println("Controller Cuisine: " + cuisine);
         System.out.println("Controller Open Now: " + openNow);
         return googlePlacesService.getRandomRestaurants(location, radius, minPrice, maxPrice, cuisine, numRestaurants, openNow);
     }
