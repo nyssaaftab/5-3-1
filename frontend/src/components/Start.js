@@ -145,7 +145,7 @@ function FilterPage() {
         <div className="max-w-3xl w-full bg-white rounded-3xl shadow-2xl p-8">
           <div className="text-center mb-8">
             <h1 className="text-5xl font-bold text-gray-800 mb-2">5-3-1</h1>
-            <p className="text-gray-600 text-lg">Can't decide where to eat? We'll help! Enter your location and preferences, and we'll show you 5 random restaurants. Pick your top 3 favorites, then let us choose 1 for you. No more dinner debates—just great food.</p>
+            <p className="text-gray-600 text-lg">Take a chance and find your new favorite spot!</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
