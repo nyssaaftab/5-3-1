@@ -16,27 +16,6 @@ A decision-making app that helps users find restaurants when they can't decide, 
 - **Backend**: Spring Boot, Google Places API
 - **Deployment**: Docker-ready
 
-## Project Structure
-
-```
-├── backend/                 # Spring Boot API
-│   ├── src/main/java/      # Java source code
-│   ├── src/main/resources/ # Configuration files
-│   ├── src/test/           # Test files
-│   ├── pom.xml            # Maven dependencies
-│   └── Dockerfile         # Container configuration
-├── frontend/               # React application
-│   ├── src/
-│   │   ├── components/    # React components
-│   │   ├── styles/        # CSS files
-│   │   └── assets/        # Images and icons
-│   ├── public/            # Static assets
-│   └── package.json       # Node dependencies
-├── assets/                # Project assets
-│   └── images/           # Screenshots and documentation images
-└── docs/                 # Documentation
-```
-
 ## Getting Started
 
 ### Prerequisites
@@ -78,14 +57,4 @@ A decision-making app that helps users find restaurants when they can't decide, 
 - `GET /api/restaurants/google-places` - Get place details by ID
 - `POST /api/restaurants/select` - Select final restaurant from choices
 
-## Environment Variables
 
-### Backend
-- `GOOGLE_API_KEY` - Google Places API key for server-side requests
-
-### Frontend
-- `REACT_APP_GOOGLE_MAPS_API_KEY` - Google Maps API key for client-side autocomplete
-
-## License
-
-This project is for portfolio purposes.
