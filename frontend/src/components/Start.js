@@ -105,12 +105,18 @@ function FilterPage() {
 
   const handleSelectRestaurant = (restaurantId) => {
     setSelectedRestaurants((prevSelected) => {
-      const updated = prevSelected.includes(restaurantId)
-        ? prevSelected.filter((id) => id !== restaurantId)
-        : prevSelected.length < 3
-        ? [...prevSelected, restaurantId]
-        : prevSelected;
-      return updated;
+      if (prevSelected.includes(restaurantId)) {
+        // Deselect
+        return prevSelected.filter((id) => id !== restaurantId);
+      } else if (prevSelected.length < 3) {
+        // Select (under limit)
+        return [...prevSelected, restaurantId];
+      } else {
+        // At limit - show warning
+        setError('You can only select 3 restaurants. Please deselect one to choose another.');
+        setTimeout(() => setError(null), 3000); // Clear error after 3 seconds
+        return prevSelected;
+      }
     });
   };
 
@@ -164,7 +170,7 @@ function FilterPage() {
                   selectedPlace={selectedPlace}
                   setSelectedPlace={setSelectedPlace}
                 />
-                <CurrentLocationButton setCurrLocation={setCurrLocation} setUseCurrLocation={setUseCurrLocation} useCurrLocation={useCurrLocation} />
+                <CurrentLocationButton setCurrLocation={setCurrLocation} setUseCurrLocation={setUseCurrLocation} useCurrLocation={useCurrLocation} setFormattedAddress={setFormattedAddress} />
               </div>
             </div>
 
@@ -283,6 +289,12 @@ function FilterPage() {
             <h2 className="text-3xl font-bold text-gray-800 mb-2">Choose Your Top 3</h2>
             <p className="text-gray-600">Selected: {selectedRestaurants.length}/3</p>
           </div>
+
+          {error && (
+            <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 text-orange-700 text-sm mb-6 max-w-md mx-auto text-center">
+              {error}
+            </div>
+          )}
 
           <div className="flex flex-wrap justify-center gap-6 mb-8 max-w-5xl mx-auto">
             {restaurants.map((restaurant) => (
