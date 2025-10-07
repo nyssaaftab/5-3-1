@@ -11,10 +11,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
-        registry.addMapping("/**") // Allow all endpoints
-                .allowedOrigins("http://localhost:3000") // Allow requests from React app
+        registry.addMapping("/**")
+                .allowedOrigins(
+                    "http://localhost:3000",  // Local development
+                    "https://*.vercel.app"     // Vercel deployments
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowCredentials(true);
+                .allowedHeaders("*")
+                .allowCredentials(false);  // Set to false when using wildcard origins
     }
 }
 
