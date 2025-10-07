@@ -10,7 +10,7 @@ function FilterRestaurantCard({ restaurant, onSelect, isSelected }) {
 
   const renderPriceLevel = (level) => {
     if (!level) return '';
-    return '$'.repeat(level) + '·'.repeat(3 - level);
+    return '$'.repeat(level);
   };
 
   return (
@@ -20,25 +20,38 @@ function FilterRestaurantCard({ restaurant, onSelect, isSelected }) {
         isSelected ? 'ring-4 ring-orange-500' : ''
       }`}
     >
-      <div className="h-32 bg-gradient-to-br from-orange-400 to-red-400 flex items-center justify-center text-5xl">
-        🍽️
+      <div className="h-32 bg-gradient-to-br from-orange-400 to-red-400 flex items-center justify-center text-5xl overflow-hidden">
+        {restaurant.photoUrl ? (
+          <img
+            src={restaurant.photoUrl}
+            alt={restaurant.name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span>🍽️</span>
+        )}
       </div>
       <div className="p-4">
         <h3 className="text-lg font-bold text-gray-800 mb-1 truncate">{restaurant.name}</h3>
         <p className="text-sm text-gray-600 mb-3 truncate">{restaurant.address || restaurant.vicinity}</p>
         <div className="flex flex-col gap-1 text-xs text-gray-500">
-          {restaurant.rating && (
-            <span className="flex items-center">
-              <Star className="w-3 h-3 text-yellow-500 mr-1 fill-yellow-500" />
-              {restaurant.rating}
-            </span>
+          <div className="flex items-center justify-between">
+            {restaurant.rating && (
+              <span className="flex items-center">
+                <Star className="w-3 h-3 text-yellow-500 mr-1 fill-yellow-500" />
+                {restaurant.rating}
+              </span>
+            )}
+            {restaurant.price_level && (
+              <span>{renderPriceLevel(restaurant.price_level)}</span>
+            )}
+          </div>
+          {restaurant.distance && (
+            <span>{restaurant.distance}</span>
           )}
-          {restaurant.price_level && (
-            <span>{renderPriceLevel(restaurant.price_level)}</span>
-          )}
-          {restaurant.openingHours && (
-            <span className={restaurant.openingHours.openNow ? 'text-green-600' : 'text-red-600'}>
-              {restaurant.openingHours.openNow ? '✓ Open Now' : '✗ Closed'}
+          {restaurant.opening_hours && (
+            <span className={restaurant.opening_hours.open_now ? 'text-green-600' : 'text-red-600'}>
+              {restaurant.opening_hours.open_now ? '✓ Open Now' : '✗ Closed'}
             </span>
           )}
         </div>

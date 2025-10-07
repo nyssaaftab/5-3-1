@@ -22,7 +22,7 @@ public class Restaurant {
     @JsonProperty("user_ratings_total")
     private Integer numRatings;
 
-    @JsonProperty("opening_hours") 
+    @JsonProperty("opening_hours")
     private OpeningHours openingHours;
 
     @JsonProperty("icon") 
@@ -39,9 +39,14 @@ public class Restaurant {
     @JsonProperty("formatted_phone_number")
     private String phone;
 
+    private String photoUrl;
+
     public static class OpeningHours {
         @JsonProperty("open_now")
         private Boolean openNow;
+
+        @JsonProperty("weekday_text")
+        private String[] weekdayText;
 
         public Boolean getOpenNow() {
             return openNow;
@@ -49,6 +54,14 @@ public class Restaurant {
 
         public void setOpenNow(Boolean openNow) {
             this.openNow = openNow;
+        }
+
+        public String[] getWeekdayText() {
+            return weekdayText;
+        }
+
+        public void setWeekdayText(String[] weekdayText) {
+            this.weekdayText = weekdayText;
         }
     }
 
@@ -155,5 +168,8 @@ public class Restaurant {
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
+
+    public String getPhotoUrl() { return photoUrl; }
+    public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
 
 }

@@ -4,6 +4,7 @@ import RestaurantCard from './FilterRestaurantCard';
 import LocationSearch from './LocationSearch.js';
 import CurrentLocationButton from './CurrentLocationButton';
 import { MapPin, DollarSign, Navigation, Star } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 function FilterPage() {
   const [maxPrice, setMaxPrice] = useState(4);
@@ -13,6 +14,8 @@ function FilterPage() {
   const [searchLocation, setSearchLocation] = useState('40.1106,-88.2073');
   const [currLocation, setCurrLocation] = useState('');
   const [useCurrLocation, setUseCurrLocation] = useState(false);
+  const [formattedAddress, setFormattedAddress] = useState('');
+  const [selectedPlace, setSelectedPlace] = useState(null);
   const [radiusMiles, setRadiusMiles] = useState(0.5);
   const [openNow, setOpenNow] = useState(true);
   const [selectedRestaurants, setSelectedRestaurants] = useState([]);
@@ -43,7 +46,7 @@ function FilterPage() {
     setIsLoading(true);
 
     try {
-      const response = await axios.get('http://localhost:8081/api/restaurants/random', {
+      const response = await axios.get(`${API_BASE_URL}/api/restaurants/random`, {
         params: {
           cuisine: cuisineType === 'all' ? '' : cuisineType,
           minPrice: 1,
@@ -127,21 +130,19 @@ function FilterPage() {
     setSelectedRestaurants([]);
     setChosenRestaurant(null);
     setError(null);
-    setSearchLocation('40.1106,-88.2073');
-    setCurrLocation('');
-    setUseCurrLocation(false);
+    // Keep location state unchanged
   };
 
   const renderPriceLevel = (level) => {
     if (!level) return '';
-    return '$'.repeat(level) + '·'.repeat(3 - level);
+    return '$'.repeat(level);
   };
 
   // Step 0: No restaurants yet - show search form
   if (!chosenRestaurant && restaurants.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8">
+        <div className="max-w-3xl w-full bg-white rounded-3xl shadow-2xl p-8">
           <div className="text-center mb-8">
             <h1 className="text-5xl font-bold text-gray-800 mb-2">5-3-1</h1>
             <p className="text-gray-600">Never argue about where to eat again</p>
@@ -154,7 +155,15 @@ function FilterPage() {
                 Your Location
               </label>
               <div className="space-y-2">
-                <LocationSearch searchLocation={searchLocation} setSearchLocation={setSearchLocation} setUseCurrLocation={setUseCurrLocation} />
+                <LocationSearch
+                  searchLocation={searchLocation}
+                  setSearchLocation={setSearchLocation}
+                  setUseCurrLocation={setUseCurrLocation}
+                  formattedAddress={formattedAddress}
+                  setFormattedAddress={setFormattedAddress}
+                  selectedPlace={selectedPlace}
+                  setSelectedPlace={setSelectedPlace}
+                />
                 <CurrentLocationButton setCurrLocation={setCurrLocation} setUseCurrLocation={setUseCurrLocation} useCurrLocation={useCurrLocation} />
               </div>
             </div>
@@ -327,9 +336,18 @@ function FilterPage() {
           </div>
 
           <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+            {chosenRestaurant.photoUrl && (
+              <div className="h-64 overflow-hidden">
+                <img
+                  src={chosenRestaurant.photoUrl}
+                  alt={chosenRestaurant.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
             <div className="p-12 text-center">
               <h3 className="text-4xl font-bold text-gray-800 mb-4">{chosenRestaurant.name}</h3>
-              <p className="text-xl text-gray-600 mb-6">{chosenRestaurant.address}</p>
+              <p className="text-xl text-gray-600 mb-6">{chosenRestaurant.address || chosenRestaurant.vicinity}</p>
               <div className="flex items-center justify-center gap-8 text-lg text-gray-500 mb-8">
                 {chosenRestaurant.rating && (
                   <span className="flex items-center">
@@ -344,12 +362,29 @@ function FilterPage() {
               {chosenRestaurant.overview && (
                 <p className="text-gray-600 mb-6">{chosenRestaurant.overview}</p>
               )}
+              {chosenRestaurant.opening_hours && (
+                <div className="mb-6">
+                  <div className={`text-lg font-semibold mb-2 ${chosenRestaurant.opening_hours.open_now ? 'text-green-600' : 'text-red-600'}`}>
+                    {chosenRestaurant.opening_hours.open_now ? '✓ Open Now' : '✗ Closed'}
+                  </div>
+                  {chosenRestaurant.opening_hours.weekday_text && chosenRestaurant.opening_hours.weekday_text.length > 0 && (
+                    <div className="text-left max-w-md mx-auto bg-gray-50 rounded-xl p-4">
+                      <h4 className="font-semibold text-gray-800 mb-2">Hours</h4>
+                      <div className="text-sm text-gray-600 space-y-1">
+                        {chosenRestaurant.opening_hours.weekday_text.map((day, index) => (
+                          <div key={index}>{day}</div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
               {chosenRestaurant.website && (
                 <a
                   href={chosenRestaurant.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block px-8 py-3 bg-blue-500 text-white rounded-xl font-semibold mr-4 hover:bg-blue-600 transition-colors"
+                  className="inline-block px-8 py-3 bg-orange-500 text-white rounded-xl font-semibold mr-4 hover:bg-orange-600 transition-colors"
                 >
                   Visit Website
                 </a>

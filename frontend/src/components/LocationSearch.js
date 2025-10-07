@@ -2,11 +2,9 @@ import React, {useState, useEffect} from "react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import "../styles/LocationSearch.css";
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
-const LocationSearch = ({ searchLocation, setSearchLocation, setUseCurrLocation }) => {
-  //get the formatted address
-  const [formattedAddress, setFormattedAddress] = useState('');
-  const [selectedPlace, setSelectedPlace] = useState(null);
+const LocationSearch = ({ searchLocation, setSearchLocation, setUseCurrLocation, formattedAddress, setFormattedAddress, selectedPlace, setSelectedPlace }) => {
 
   // Debug: Log API key status
   console.log('API Key loaded:', !!process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
@@ -24,7 +22,7 @@ const LocationSearch = ({ searchLocation, setSearchLocation, setUseCurrLocation 
         try {
           // Send placeId to Spring Boot backend to get place details
           console.log("Sending placeId to backend:", placeId);
-          const response = await axios.get(`http://localhost:8081/api/restaurants/google-places`, {
+          const response = await axios.get(`${API_BASE_URL}/api/restaurants/google-places`, {
             params: {
               placeId: placeId,
             },
@@ -57,12 +55,6 @@ const LocationSearch = ({ searchLocation, setSearchLocation, setUseCurrLocation 
      // Log whenever searchLocation changes
      useEffect(() => {
       console.log("Search location has changed:", searchLocation);
-
-      // If searchLocation is reset to default UIUC coordinates, clear the display
-      if (searchLocation === '40.1106,-88.2073') {
-        setFormattedAddress('');
-        setSelectedPlace(null);
-      }
     }, [searchLocation]); // Dependency on searchLocation means this effect runs when searchLocation changes
   
   return (

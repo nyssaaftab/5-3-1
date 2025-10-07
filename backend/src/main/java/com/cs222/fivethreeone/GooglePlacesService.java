@@ -42,39 +42,14 @@ public class GooglePlacesService {
 
         List<Restaurant> restaurants = new ArrayList<>();
 
-        if (openNow) {
-            restaurants = getRestaurantsWithFilter(location, radius, minPrice, maxPrice, cuisine, numRestaurants, true);
-        } else {
-            // Get both open and closed restaurants by making two calls
-            List<Restaurant> openRestaurants = getRestaurantsWithFilter(location, radius, minPrice, maxPrice, cuisine, numRestaurants, true);
-            List<Restaurant> allRestaurants = getRestaurantsWithFilter(location, radius, minPrice, maxPrice, cuisine, numRestaurants * 2, false);
-            
-            // Combine and shuffle
-            List<Restaurant> combined = new ArrayList<>();
-            combined.addAll(openRestaurants);
-            combined.addAll(allRestaurants);
-            
-            // Remove duplicates
-            Set<String> seen = new HashSet<>();
-            List<Restaurant> unique = new ArrayList<>();
-            for (Restaurant restaurant : combined) {
-                if (seen.add(restaurant.getName())) {
-                    unique.add(restaurant);
-                }
-                if (unique.size() == numRestaurants) {
-                    break;
-                }
-            }
-            
-            Collections.shuffle(unique);
-            restaurants = unique;
-        }
-        
+        // Simply get restaurants with or without the open now filter
+        restaurants = getRestaurantsWithFilter(location, radius, minPrice, maxPrice, cuisine, numRestaurants, openNow);
+
         // Get details for all restaurants
         for (Restaurant r : restaurants) {
             getDetails(r);
         }
-        
+
         return new RestaurantSearchResponse(restaurants, false, "");
     }
 
@@ -103,9 +78,12 @@ public class GooglePlacesService {
 
         url.append("&key=").append(apiKey);
 
-        System.out.println("Google Places API URL: " + url.toString());
+        // Log URL without exposing API key
+        String logUrl = url.toString().replaceAll("key=[^&]*", "key=***REDACTED***");
+        System.out.println("Google Places API URL: " + logUrl);
         String response = restTemplate.getForObject(url.toString(), String.class);
-        System.out.println("Google Places API Response: " + response);
+        // Don't log full response as it may contain sensitive data
+        System.out.println("Google Places API call completed successfully");
         JsonNode root = objectMapper.readTree(response);
         JsonNode results = root.path("results");
 
@@ -132,7 +110,7 @@ public class GooglePlacesService {
 
     private void getDetails(Restaurant restaurant) throws JsonProcessingException {
     String detailsUrl = String.format(
-        "https://maps.googleapis.com/maps/api/place/details/json?fields=editorial_summary,website,formatted_phone_number,opening_hours&place_id=%s&key=%s", 
+        "https://maps.googleapis.com/maps/api/place/details/json?fields=editorial_summary,website,formatted_phone_number,opening_hours,photos&place_id=%s&key=%s",
         restaurant.getID(), apiKey);
 
     String detailsResponse = restTemplate.getForObject(detailsUrl, String.class);
@@ -150,11 +128,36 @@ public class GooglePlacesService {
     }
     if (detailsResult.has("opening_hours")) {
         JsonNode openingHoursNode = detailsResult.path("opening_hours");
-        Restaurant.OpeningHours openingHours = new Restaurant.OpeningHours();
+        // Get existing opening hours or create new one
+        Restaurant.OpeningHours openingHours = restaurant.getOpeningHours();
+        if (openingHours == null) {
+            openingHours = new Restaurant.OpeningHours();
+        }
+
+        // Only update open_now if it's present in the details response
         if (openingHoursNode.has("open_now")) {
             openingHours.setOpenNow(openingHoursNode.path("open_now").asBoolean());
         }
+
+        if (openingHoursNode.has("weekday_text")) {
+            JsonNode weekdayTextNode = openingHoursNode.path("weekday_text");
+            String[] weekdayText = new String[weekdayTextNode.size()];
+            for (int i = 0; i < weekdayTextNode.size(); i++) {
+                weekdayText[i] = weekdayTextNode.get(i).asText();
+            }
+            openingHours.setWeekdayText(weekdayText);
+        }
         restaurant.setOpeningHours(openingHours);
+    }
+    if (detailsResult.has("photos")) {
+        JsonNode photosNode = detailsResult.path("photos");
+        if (photosNode.isArray() && photosNode.size() > 0) {
+            String photoReference = photosNode.get(0).path("photo_reference").asText();
+            String photoUrl = String.format(
+                "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=%s&key=%s",
+                photoReference, apiKey);
+            restaurant.setPhotoUrl(photoUrl);
+        }
     }
     }    
 
