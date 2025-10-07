@@ -115,14 +115,15 @@ public class GooglePlacesControllerTest {
             new Restaurant("Taco Bell", "500m", "321 Green St"),
             new Restaurant("Canes", "1200m", "658 E Healey St")
         );
-        when(googlePlacesService.getRandomRestaurants(anyString(), anyString(), eq(2), anyString(), anyInt(), anyBoolean()))
+        when(googlePlacesService.getRandomRestaurants(anyString(), anyString(), anyInt(), anyInt(), anyString(), anyInt(), anyBoolean()))
             .thenReturn(new RestaurantSearchResponse(filteredRestaurants, false, ""));
 
         mockMvc.perform(get("/api/restaurants/random")
             .param("location", "40.730610,-73.935242")
             .param("radius", "1500")
-            .param("numRestaurants", "2")  
-            .param("priceLevel", "2")      
+            .param("numRestaurants", "2")
+            .param("minPrice", "1")
+            .param("maxPrice", "2")
             .param("cuisine", "Mexican"))  
             .andExpect(status().isOk())
             .andExpect(jsonPath("$").isArray())

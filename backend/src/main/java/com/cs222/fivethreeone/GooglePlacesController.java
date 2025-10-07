@@ -40,14 +40,17 @@ public class GooglePlacesController {
         @RequestParam(defaultValue = "40.1106,-88.2073") String location, // Default to latitude,longitude
         @RequestParam(defaultValue = "1500") String radius,
         @RequestParam(defaultValue = "5") int numRestaurants,
-        @RequestParam(required = false) Integer priceLevel,
+        @RequestParam(required = false) Integer minPrice,
+        @RequestParam(required = false) Integer maxPrice,
         @RequestParam(required = false) String cuisine,
-        @RequestParam(defaultValue = "true") boolean openNow) 
+        @RequestParam(defaultValue = "true") boolean openNow)
         throws JsonMappingException, JsonProcessingException {
         System.out.println("Controller Location: " + location);
         System.out.println("Controller Radius: " + radius);
+        System.out.println("Controller Min Price: " + minPrice);
+        System.out.println("Controller Max Price: " + maxPrice);
         System.out.println("Controller Open Now: " + openNow);
-        return googlePlacesService.getRandomRestaurants(location, radius, priceLevel, cuisine, numRestaurants, openNow);
+        return googlePlacesService.getRandomRestaurants(location, radius, minPrice, maxPrice, cuisine, numRestaurants, openNow);
     }
 
 

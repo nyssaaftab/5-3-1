@@ -38,16 +38,16 @@ public class GooglePlacesService {
         return objectMapper.convertValue(results, new TypeReference<List<Restaurant>>() {});
     }
 
-    public RestaurantSearchResponse getRandomRestaurants(String location, String radius, Integer minPrice, Integer maxPrice, String cuisine, int numRestaurants, boolean openNow) throws JsonMappingException, JsonProcessingException {
-
+    public RestaurantSearchResponse getRandomRestaurants(String location, String radius, Integer priceLevel, String cuisine, int numRestaurants, boolean openNow) throws JsonMappingException, JsonProcessingException {
+        
         List<Restaurant> restaurants = new ArrayList<>();
-
+        
         if (openNow) {
-            restaurants = getRestaurantsWithFilter(location, radius, minPrice, maxPrice, cuisine, numRestaurants, true);
+            restaurants = getRestaurantsWithPriceFallback(location, radius, priceLevel, cuisine, numRestaurants, true);
         } else {
             // Get both open and closed restaurants by making two calls
-            List<Restaurant> openRestaurants = getRestaurantsWithFilter(location, radius, minPrice, maxPrice, cuisine, numRestaurants, true);
-            List<Restaurant> allRestaurants = getRestaurantsWithFilter(location, radius, minPrice, maxPrice, cuisine, numRestaurants * 2, false);
+            List<Restaurant> openRestaurants = getRestaurantsWithPriceFallback(location, radius, priceLevel, cuisine, numRestaurants, true);
+            List<Restaurant> allRestaurants = getRestaurantsWithPriceFallback(location, radius, priceLevel, cuisine, numRestaurants * 2, false);
             
             // Combine and shuffle
             List<Restaurant> combined = new ArrayList<>();
@@ -75,10 +75,83 @@ public class GooglePlacesService {
             getDetails(r);
         }
         
-        return new RestaurantSearchResponse(restaurants, false, "");
+        // Check if price fallback was used
+        boolean priceFallbackUsed = false;
+        String fallbackMessage = "";
+        
+        if (priceLevel != null && restaurants.size() > 0) {
+            // Check if any restaurants have different price levels than requested
+            boolean hasDifferentPrice = restaurants.stream()
+                .anyMatch(r -> r.getPriceLevel() != null && !r.getPriceLevel().equals(priceLevel));
+            
+            if (hasDifferentPrice) {
+                priceFallbackUsed = true;
+                fallbackMessage = "Not enough restaurants at $" + "$$$$".substring(0, priceLevel) + " level. Showing nearby price options.";
+            }
+        }
+        
+        return new RestaurantSearchResponse(restaurants, priceFallbackUsed, fallbackMessage);
     }
-
-    private List<Restaurant> getRestaurantsWithFilter(String location, String radius, Integer minPrice, Integer maxPrice, String cuisine, int numRestaurants, boolean openNow) throws JsonMappingException, JsonProcessingException {
+    
+    private List<Restaurant> getRestaurantsWithPriceFallback(String location, String radius, Integer priceLevel, String cuisine, int numRestaurants, boolean openNow) throws JsonMappingException, JsonProcessingException {
+        List<Restaurant> restaurants = new ArrayList<>();
+        
+        if (priceLevel == null) {
+            // No price filter, just get restaurants normally
+            return getRestaurantsWithFilter(location, radius, null, cuisine, numRestaurants, openNow);
+        }
+        
+        // Try the requested price level first
+        restaurants = getRestaurantsWithFilter(location, radius, priceLevel, cuisine, numRestaurants, openNow);
+        System.out.println("Found " + restaurants.size() + " restaurants at price level " + priceLevel);
+        
+        if (restaurants.size() >= numRestaurants) {
+            return restaurants;
+        }
+        
+        // Not enough restaurants, try one level below
+        if (priceLevel > 1) {
+            int lowerPrice = priceLevel - 1;
+            List<Restaurant> lowerPriceRestaurants = getRestaurantsWithFilter(location, radius, lowerPrice, cuisine, numRestaurants, openNow);
+            System.out.println("Found " + lowerPriceRestaurants.size() + " restaurants at price level " + lowerPrice);
+            
+            // Combine with original results
+            Set<String> seen = new HashSet<>();
+            for (Restaurant r : restaurants) {
+                seen.add(r.getName());
+            }
+            
+            for (Restaurant r : lowerPriceRestaurants) {
+                if (seen.add(r.getName()) && restaurants.size() < numRestaurants) {
+                    restaurants.add(r);
+                }
+            }
+        }
+        
+        // Still not enough? Try one level above
+        if (restaurants.size() < numRestaurants && priceLevel < 4) {
+            int higherPrice = priceLevel + 1;
+            List<Restaurant> higherPriceRestaurants = getRestaurantsWithFilter(location, radius, higherPrice, cuisine, numRestaurants, openNow);
+            System.out.println("Found " + higherPriceRestaurants.size() + " restaurants at price level " + higherPrice);
+            
+            // Combine with existing results
+            Set<String> seen = new HashSet<>();
+            for (Restaurant r : restaurants) {
+                seen.add(r.getName());
+            }
+            
+            for (Restaurant r : higherPriceRestaurants) {
+                if (seen.add(r.getName()) && restaurants.size() < numRestaurants) {
+                    restaurants.add(r);
+                }
+            }
+        }
+        
+        System.out.println("Final result: " + restaurants.size() + " restaurants after price fallback");
+        return restaurants;
+    }
+    
+    private List<Restaurant> getRestaurantsWithFilter(String location, String radius, Integer priceLevel, String cuisine, int numRestaurants, boolean openNow) throws JsonMappingException, JsonProcessingException {
         StringBuilder url = new StringBuilder(
             String.format("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%s&radius=%s&type=restaurant", 
             location, radius)
@@ -91,10 +164,9 @@ public class GooglePlacesService {
             System.out.println("Getting all restaurants (no opennow filter)");
         }
 
-        if (minPrice != null && maxPrice != null) {
-            url.append("&minprice=").append(minPrice);
-            url.append("&maxprice=").append(maxPrice);
-            System.out.println("Price range: " + minPrice + " to " + maxPrice);
+        if (priceLevel != null) {
+            url.append("&minprice=").append(priceLevel);
+            url.append("&maxprice=").append(priceLevel);
         }
 
         if (cuisine != null && !cuisine.isEmpty()) {

@@ -1,42 +1,31 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import RestaurantCard from './FilterRestaurantCard';
-import LocationSearch from './LocationSearch.js'; // Import the LocationSearch component
-import CurrentLocationButton from './CurrentLocationButton'; // Import the CurrentLocationButton component
-import '../styles/Start.css'
-import '../styles/LocationSearch.css'
+import LocationSearch from './LocationSearch.js';
+import CurrentLocationButton from './CurrentLocationButton';
+import { MapPin, DollarSign, Navigation, Star } from 'lucide-react';
 
 function FilterPage() {
-  const [priceValue, setPriceValue] = useState(1);
+  const [maxPrice, setMaxPrice] = useState(4);
   const [cuisineType, setCuisineType] = useState('all');
   const [restaurants, setRestaurants] = useState([]);
   const [cuisines] = useState(['Italian', 'Japanese', 'Mexican', 'Indian', 'American', 'Thai', 'Chinese']);
-  //const [location, setLocation] = useState('');
-  const [searchLocation, setSearchLocation] = useState(''); // Initialize as an object
+  const [searchLocation, setSearchLocation] = useState('40.1106,-88.2073');
   const [currLocation, setCurrLocation] = useState('');
   const [useCurrLocation, setUseCurrLocation] = useState(false);
   const [radiusMiles, setRadiusMiles] = useState(0.5);
-  const [openNow, setOpenNow] = useState(true); // Default to true
+  const [openNow, setOpenNow] = useState(true);
   const [selectedRestaurants, setSelectedRestaurants] = useState([]);
   const [chosenRestaurant, setChosenRestaurant] = useState(null);
-
-  const getSelectionMessage = () => {
-    switch (selectedRestaurants.length) {
-      case 0:
-        return "Please select 3 restaurants to continue";
-      case 1:
-        return "Great! You've selected 1 restaurant. Please select 2 more";
-      case 2:
-        return "Almost there! Select 1 more restaurant";
-      case 3:
-        return "Perfect! You've selected 3 restaurants";
-      default:
-        return "";
-    }
-  };
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setRestaurants([]);
+    setSelectedRestaurants([]);
+
     const radiusInMeters = radiusMiles * 1609.34;
 
     let loc = '';
@@ -44,78 +33,149 @@ function FilterPage() {
       loc = currLocation;
     } else if (searchLocation) {
       loc = searchLocation;
-      console.log("Using search location");
     }
 
+    if (!loc || loc.trim() === '') {
+      setError('Please select a location or use your current location');
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
-      console.log("Sending location to backend:", loc);
-      console.log("Open Now setting:", openNow);
       const response = await axios.get('http://localhost:8081/api/restaurants/random', {
         params: {
-          cuisineType: cuisineType === 'all' ? '' : cuisineType,
-          priceLevel: priceValue,
+          cuisine: cuisineType === 'all' ? '' : cuisineType,
+          minPrice: 1,
+          maxPrice: maxPrice,
           location: loc,
           radius: radiusInMeters,
           openNow: openNow,
         },
       });
-      // Handle the new response format
+
       const restaurants = response.data.restaurants || response.data;
-      const priceFallbackUsed = response.data.priceFallbackUsed || false;
-      const fallbackMessage = response.data.fallbackMessage || "";
-      
-      // Add unique IDs to the restaurants
+
+      if (!restaurants || restaurants.length === 0) {
+        setError('No restaurants found. Try expanding your search radius or changing your filters.');
+        setRestaurants([]);
+        return;
+      }
+
       const restaurantsWithIds = restaurants.map((restaurant, index) => ({
         ...restaurant,
-        id: `${restaurant.name}-${index}` // Create unique ID using name and index
+        id: `${restaurant.name}-${index}`
       }));
-      console.log("Restaurants with IDs:", restaurantsWithIds);
-      console.log("Price fallback used:", priceFallbackUsed);
-      if (priceFallbackUsed) {
-        console.log("Fallback message:", fallbackMessage);
-      }
+
       setRestaurants(restaurantsWithIds);
     } catch (error) {
       console.error('Error fetching restaurants:', error);
+      if (error.response) {
+        let errorMessage = 'Failed to fetch restaurants';
+
+        if (typeof error.response.data === 'string') {
+          errorMessage = error.response.data;
+        } else if (error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        } else if (error.response.status === 500) {
+          errorMessage = 'Server error. There might not be enough restaurants matching your filters. Try expanding your radius or changing filters.';
+        } else if (error.response.status === 400) {
+          errorMessage = 'Invalid search parameters. Please check your location and filters.';
+        }
+
+        setError(errorMessage);
+      } else if (error.request) {
+        setError('Unable to reach the server. Please make sure the backend is running.');
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSelectRestaurant = (restaurantId) => {
-    console.log("Selected Restaurants Before:", selectedRestaurants);
     setSelectedRestaurants((prevSelected) => {
       const updated = prevSelected.includes(restaurantId)
         ? prevSelected.filter((id) => id !== restaurantId)
         : prevSelected.length < 3
         ? [...prevSelected, restaurantId]
         : prevSelected;
-      console.log("Selected Restaurants After:", updated);
       return updated;
     });
   };
 
   const submitSelection = () => {
-    // Get the full restaurant objects for the selected IDs
-    const selectedRestaurantObjects = selectedRestaurants.map(id => 
+    const selectedRestaurantObjects = selectedRestaurants.map(id =>
       restaurants.find(r => r.id === id)
     );
-    
-    // Randomly select one restaurant
+
     const randomIndex = Math.floor(Math.random() * selectedRestaurantObjects.length);
     const chosenOne = selectedRestaurantObjects[randomIndex];
-    
+
     setChosenRestaurant(chosenOne);
   };
 
-  return (
-    <div className="filter-page">
-      <h1>Choose Your Preferences</h1>
-      {!chosenRestaurant ? (
-        <>
-          <form onSubmit={handleSubmit} className="filter-form">
-            <div className="filter-group">
-              <label>Cuisine Type</label>
-              <select value={cuisineType} onChange={(e) => setCuisineType(e.target.value)}>
-                <option value="all">All</option>
+  const reset = () => {
+    setRestaurants([]);
+    setSelectedRestaurants([]);
+    setChosenRestaurant(null);
+    setError(null);
+  };
+
+  const renderPriceLevel = (level) => {
+    if (!level) return '';
+    return '$'.repeat(level) + '·'.repeat(3 - level);
+  };
+
+  // Step 0: No restaurants yet - show search form
+  if (!chosenRestaurant && restaurants.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-5xl font-bold text-gray-800 mb-2">5-3-1</h1>
+            <p className="text-gray-600">Never argue about where to eat again</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <MapPin className="inline w-4 h-4 mr-1" />
+                Your Location
+              </label>
+              <div className="space-y-2">
+                <LocationSearch searchLocation={searchLocation} setSearchLocation={setSearchLocation} />
+                <CurrentLocationButton setCurrLocation={setCurrLocation} setUseCurrLocation={setUseCurrLocation} />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <Navigation className="inline w-4 h-4 mr-1" />
+                Search Radius: {radiusMiles.toFixed(1)} miles
+              </label>
+              <input
+                type="range"
+                min="0.1"
+                max="25"
+                step="0.1"
+                value={radiusMiles}
+                onChange={(e) => setRadiusMiles(parseFloat(e.target.value))}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Cuisine Type
+              </label>
+              <select
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                value={cuisineType}
+                onChange={(e) => setCuisineType(e.target.value)}
+              >
+                <option value="all">All Cuisines</option>
                 {cuisines.map((cuisine) => (
                   <option key={cuisine} value={cuisine.toLowerCase()}>
                     {cuisine}
@@ -124,93 +184,190 @@ function FilterPage() {
               </select>
             </div>
 
-          <div className="filter-group">
-            <label>Your Location</label>
             <div>
-              {/* Use LocationSearch for Google AutoComplete*/}
-              <LocationSearch searchLocation={searchLocation} setSearchLocation={setSearchLocation} />
-              </div> 
-              {/* Button to get current location */}
-              <CurrentLocationButton setCurrLocation={setCurrLocation} setUseCurrLocation={setUseCurrLocation} />
-            </div>
-
-            <div className="filter-group">
-              <label>Search Radius</label>
-              <input 
-                type="range" 
-                min="0.1" 
-                max="10" 
-                step="0.1" 
-                value={radiusMiles}
-                onChange={(e) => setRadiusMiles(parseFloat(e.target.value))}
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                <DollarSign className="inline w-4 h-4 mr-1" />
+                Max Price: {'$'.repeat(maxPrice)}
+              </label>
+              <input
+                type="range"
+                min="1"
+                max="4"
+                step="1"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(parseInt(e.target.value))}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
               />
-              <div>Radius: {radiusMiles.toFixed(1)} miles</div>
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>$</span>
+                <span>$$</span>
+                <span>$$$</span>
+                <span>$$$$</span>
+              </div>
             </div>
 
-            <div className="filter-group">
-              <label>Price Range</label>
-              <input 
-                type="range" 
-                min="1" 
-                max="5" 
-                value={priceValue}
-                onChange={(e) => setPriceValue(e.target.value)}
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="openNow"
+                checked={openNow}
+                onChange={(e) => setOpenNow(e.target.checked)}
+                className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
               />
-              <div>Price: {"$".repeat(priceValue)}</div>
-            </div>
-
-            <div className="filter-group">
-              <label>
-                <input 
-                  type="checkbox" 
-                  checked={openNow}
-                  onChange={(e) => setOpenNow(e.target.checked)}
-                />
+              <label htmlFor="openNow" className="ml-2 text-sm text-gray-700">
                 Only show restaurants open now
               </label>
             </div>
 
-            <button 
-              type="submit" 
-              className="generate-button"
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
+                <strong>Error:</strong> {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full py-4 rounded-xl font-semibold text-lg shadow-lg transition-all ${
+                isLoading
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:shadow-xl hover:scale-105'
+              }`}
             >
-              Generate Restaurants
+              {isLoading ? 'Loading...' : 'Find 5 Restaurants'}
             </button>
           </form>
 
-          <div className="restaurant-results">
-  {restaurants.map((restaurant) => (
-    <div key={restaurant.id}>
-      <RestaurantCard 
-        restaurant={restaurant} 
-        isSelected={selectedRestaurants.includes(restaurant.id)}
-        onSelect={handleSelectRestaurant}
-      />
-    </div>
-  ))}
-</div>
-
-
-          <div className="restaurant-selection-status">
-            <p className="selection-message">{getSelectionMessage()}</p>
-            {selectedRestaurants.length === 3 && (
-              <button 
-                onClick={submitSelection}
-                className="submit-button"
-              >
-                Choose My Restaurant
-              </button>
-            )}
-          </div>
-        </>
-      ) : (
-        <div>
-          <h2>We chose this restaurant for you:</h2>
-          <RestaurantCard restaurant={chosenRestaurant} />
+          {isLoading && (
+            <div className="mt-6 text-center">
+              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-orange-500 border-r-transparent"></div>
+              <p className="mt-2 text-gray-600">Finding restaurants...</p>
+            </div>
+          )}
         </div>
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
+
+  // Step 1: Select 3 from 5
+  if (!chosenRestaurant && restaurants.length > 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 p-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <span className="text-6xl font-bold text-orange-500">5</span>
+              <span className="text-4xl text-gray-400">→</span>
+              <span className="text-4xl font-bold text-gray-300">3</span>
+              <span className="text-4xl text-gray-400">→</span>
+              <span className="text-4xl font-bold text-gray-300">1</span>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">Choose Your Top 3</h2>
+            <p className="text-gray-600">Selected: {selectedRestaurants.length}/3</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            {restaurants.map((restaurant) => (
+              <RestaurantCard
+                key={restaurant.id}
+                restaurant={restaurant}
+                isSelected={selectedRestaurants.includes(restaurant.id)}
+                onSelect={handleSelectRestaurant}
+              />
+            ))}
+          </div>
+
+          <div className="flex gap-4 justify-center">
+            <button
+              onClick={reset}
+              className="px-8 py-3 bg-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-400 transition-colors"
+            >
+              Start Over
+            </button>
+            <button
+              onClick={submitSelection}
+              disabled={selectedRestaurants.length !== 3}
+              className={`px-8 py-3 rounded-xl font-semibold transition-all ${
+                selectedRestaurants.length === 3
+                  ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:shadow-xl hover:scale-105'
+                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              }`}
+            >
+              Pick My Restaurant!
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Step 2: Final Pick
+  if (chosenRestaurant) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-8">
+        <div className="max-w-2xl w-full">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <span className="text-4xl font-bold text-gray-300">5</span>
+              <span className="text-4xl text-gray-400">→</span>
+              <span className="text-4xl font-bold text-gray-300">3</span>
+              <span className="text-4xl text-gray-400">→</span>
+              <span className="text-6xl font-bold text-orange-500">1</span>
+            </div>
+            <h2 className="text-4xl font-bold text-gray-800 mb-2">You're Going To...</h2>
+          </div>
+
+          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+            <div className="p-12 text-center">
+              <h3 className="text-4xl font-bold text-gray-800 mb-4">{chosenRestaurant.name}</h3>
+              <p className="text-xl text-gray-600 mb-6">{chosenRestaurant.address}</p>
+              <div className="flex items-center justify-center gap-8 text-lg text-gray-500 mb-8">
+                {chosenRestaurant.rating && (
+                  <span className="flex items-center">
+                    <Star className="w-6 h-6 text-yellow-500 mr-2 fill-yellow-500" />
+                    {chosenRestaurant.rating}
+                  </span>
+                )}
+                {chosenRestaurant.price_level && (
+                  <span className="text-2xl">{renderPriceLevel(chosenRestaurant.price_level)}</span>
+                )}
+              </div>
+              {chosenRestaurant.overview && (
+                <p className="text-gray-600 mb-6">{chosenRestaurant.overview}</p>
+              )}
+              {chosenRestaurant.website && (
+                <a
+                  href={chosenRestaurant.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-8 py-3 bg-blue-500 text-white rounded-xl font-semibold mr-4 hover:bg-blue-600 transition-colors"
+                >
+                  Visit Website
+                </a>
+              )}
+              {chosenRestaurant.phone && (
+                <a
+                  href={`tel:${chosenRestaurant.phone}`}
+                  className="inline-block px-8 py-3 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-600 transition-colors"
+                >
+                  {chosenRestaurant.phone}
+                </a>
+              )}
+            </div>
+          </div>
+
+          <div className="text-center mt-8">
+            <button
+              onClick={reset}
+              className="px-12 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            >
+              Pick Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default FilterPage;

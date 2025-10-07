@@ -73,7 +73,7 @@ public class GooglePlacesServiceTests {
 
         when(restTemplate.getForObject(anyString(), eq(String.class))).thenReturn(jsonResponse);
 
-        RestaurantSearchResponse response = googlePlacesService.getRandomRestaurants(location, radius, null, null, numRestaurants, true);
+        RestaurantSearchResponse response = googlePlacesService.getRandomRestaurants(location, radius, null, null, null, numRestaurants, true);
         List<Restaurant> restaurants = response.getRestaurants();
 
         assertEquals(numRestaurants, restaurants.size()); // Ensure it returns 5 restaurants
@@ -109,7 +109,7 @@ public class GooglePlacesServiceTests {
 
         when(restTemplate.getForObject(anyString(), eq(String.class))).thenReturn(jsonResponse);
 
-        RestaurantSearchResponse response = googlePlacesService.getRandomRestaurants(location, radius, null, null, numRestaurants, true);
+        RestaurantSearchResponse response = googlePlacesService.getRandomRestaurants(location, radius, null, null, null, numRestaurants, true);
         List<Restaurant> restaurants = response.getRestaurants();
 
         assertEquals(1, restaurants.size());

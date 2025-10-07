@@ -22,43 +22,29 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header className="App-header">
-        <div className="home-link">
-            <Link to="/">
-              <img src={homelogo} alt="Logo" style={{ width: '150px', height: 'auto' }} />
-            </Link>
-          </div>
-          <nav className="navbar">
-            <div className="menu-icon" onClick={toggleMenu}>
-              &#9776;
-            </div>
-            <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
-              <li><Link to="/" onClick={toggleMenu}>Home</Link></li>
-              <li><Link to="/start" onClick={toggleMenu}>Start</Link></li>
-              <li><Link to="/login" onClick={toggleMenu}>Login</Link></li>
-              <li><Link to="/restaurants"onClick={toggleMenu}>Restaurants</Link></li>
-              <li><Link to="/about-us"onClick={toggleMenu}>About Us</Link></li>
-            </ul>
-          </nav>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <div>
-                  
-                  <h1>5-3-1</h1>
-                  <p>Find the best Green Street restaurant for you, even when you can't decide.</p>
-                  <img src={star} alt="Star" style={{ width: 'auto', height: '100px' }} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-4">
+                <div className="text-center">
+                  <h1 className="text-7xl font-bold text-gray-800 mb-4">5-3-1</h1>
+                  <p className="text-xl text-gray-600 mb-8">Find the best restaurant for you, even when you can't decide.</p>
+                  <Link
+                    to="/start"
+                    className="inline-block px-12 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+                  >
+                    Get Started
+                  </Link>
                 </div>
-              }
-            />
-            <Route path="/start" element={<Start />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/restaurants" element={<Restaurants />} /> 
-            <Route path="/about-us" element={<AboutUs />} />
-
-          </Routes>
-        </header>
+              </div>
+            }
+          />
+          <Route path="/start" element={<Start />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/restaurants" element={<Restaurants />} />
+          <Route path="/about-us" element={<AboutUs />} />
+        </Routes>
       </div>
     </Router>
   );
