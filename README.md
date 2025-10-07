@@ -57,4 +57,6 @@ A decision-making app that helps users find restaurants when they can't decide, 
 - `GET /api/restaurants/google-places` - Get place details by ID
 - `POST /api/restaurants/select` - Select final restaurant from choices
 
+Project adapted from CS222 Team project with Nancy Wang, Elaina Xiao, and Nat Gao. Frontend rebuilt using Claude Code. 
+
 
