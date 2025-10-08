@@ -1,7 +1,7 @@
 import React from 'react';
 import { Star } from 'lucide-react';
 
-function FilterRestaurantCard({ restaurant, onSelect, isSelected }) {
+function FilterRestaurantCard({ restaurant, onSelect, isSelected, isLast }) {
   const handleCardClick = () => {
     if (onSelect) {
       onSelect(restaurant.id);
@@ -16,51 +16,73 @@ function FilterRestaurantCard({ restaurant, onSelect, isSelected }) {
   return (
     <div
       onClick={handleCardClick}
-      className={`w-64 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all hover:scale-105 ${
-        isSelected ? 'ring-4 ring-orange-500' : ''
-      }`}
+      className="w-full cursor-pointer relative"
+      style={{ borderBottom: !isLast ? '2px solid #1e3a8a' : 'none' }}
     >
-      <div className="h-32 bg-gradient-to-br from-orange-400 to-red-400 flex items-center justify-center text-5xl overflow-hidden">
-        {restaurant.photoUrl ? (
-          <img
-            src={restaurant.photoUrl}
-            alt={restaurant.name}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <span>🍽️</span>
-        )}
-      </div>
-      <div className="p-4">
-        <h3 className="text-lg font-bold text-gray-800 mb-1 truncate">{restaurant.name}</h3>
-        <p className="text-sm text-gray-600 mb-3 truncate">{restaurant.address || restaurant.vicinity}</p>
-        <div className="flex flex-col gap-1 text-xs text-gray-500">
-          <div className="flex items-center justify-between">
-            {restaurant.rating && (
-              <span className="flex items-center">
-                <Star className="w-3 h-3 text-yellow-500 mr-1 fill-yellow-500" />
-                {restaurant.rating}
-              </span>
-            )}
-            {restaurant.price_level && (
-              <span>{renderPriceLevel(restaurant.price_level)}</span>
+      <div className="flex items-center py-3 relative">
+        {/* Checkbox */}
+        <div className="w-[80px] flex items-center justify-center flex-shrink-0">
+          <div className={`w-6 h-6 border-2 border-blue-900 flex items-center justify-center ${
+            isSelected ? 'bg-blue-900' : 'bg-white'
+          }`}>
+            {isSelected && (
+              <span className="text-white text-sm font-bold">✓</span>
             )}
           </div>
-          {restaurant.distance && (
-            <span>{restaurant.distance}</span>
+        </div>
+
+        {/* Picture */}
+        <div className="w-[100px] flex items-center justify-center flex-shrink-0 pl-4">
+          <div className="w-16 h-16 border-2 border-blue-900 overflow-hidden">
+            {restaurant.photoUrl ? (
+              <img
+                src={restaurant.photoUrl}
+                alt={restaurant.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-green-50 text-2xl">
+                🍽️
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Restaurant Info */}
+        <div className="flex-1 min-w-0 pl-4">
+          <div className="flex items-center gap-3">
+            <h3 className="text-xl font-bold text-blue-900 truncate" style={{ fontFamily: '"Courier New", monospace' }}>
+              {restaurant.name}
+            </h3>
+            {restaurant.opening_hours && (
+              <p className="text-xs text-gray-600 flex-shrink-0" style={{ fontFamily: '"Courier New", monospace' }}>
+                {restaurant.opening_hours.open_now ? 'Open Now' : 'Closed'}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Rating */}
+        <div className="w-[80px] flex-shrink-0 flex items-center justify-center">
+          {restaurant.rating && (
+            <div className="flex items-center gap-1">
+              <Star className="w-4 h-4 text-blue-900 fill-blue-900" />
+              <span className="text-blue-900 font-semibold" style={{ fontFamily: '"Courier New", monospace' }}>
+                {restaurant.rating}
+              </span>
+            </div>
           )}
-          {restaurant.opening_hours && (
-            <span className={restaurant.opening_hours.open_now ? 'text-green-600' : 'text-red-600'}>
-              {restaurant.opening_hours.open_now ? '✓ Open Now' : '✗ Closed'}
+        </div>
+
+        {/* Price Level */}
+        <div className="w-[60px] pl-2 pr-2 flex-shrink-0">
+          {restaurant.price_level && (
+            <span className="text-blue-900 font-bold" style={{ fontFamily: '"Courier New", monospace' }}>
+              {renderPriceLevel(restaurant.price_level)}
             </span>
           )}
         </div>
       </div>
-      {isSelected && (
-        <div className="bg-orange-500 text-white text-center py-2 font-semibold text-sm">
-          ✓ Selected
-        </div>
-      )}
     </div>
   );
 }

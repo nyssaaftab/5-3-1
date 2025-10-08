@@ -148,22 +148,26 @@ function FilterPage() {
   // Step 0: No restaurants yet - show search form
   if (!chosenRestaurant && restaurants.length === 0) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
-        <div className="max-w-3xl w-full bg-green-50 border-l-4 border-r-4 border-blue-900 shadow-2xl">
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+        <div className="max-w-2xl w-full bg-white border-2 border-blue-900 shadow-2xl">
           {/* Guest Check Header */}
-          <div className="border-b-4 border-blue-900 p-4 bg-green-50">
-            <div className="grid grid-cols-3 gap-2 text-xs text-blue-900 mb-2">
-              <span>CHECK #{checkNumber}</span>
-              <span className="text-center">TABLE 1</span>
-              <span className="text-right">SERVER: 5-3-1</span>
+          <div className="border-b-2 border-blue-900 p-3 bg-white">
+            <div className="grid grid-cols-5 gap-2 text-xs text-blue-900 border-2 border-blue-900 mb-3 font-medium">
+              <div className="border-r border-blue-900 p-2">Date: 12/15/24</div>
+              <div className="border-r border-blue-900 p-2">Amount: $$$</div>
+              <div className="border-r border-blue-900 p-2">Guests: 1</div>
+              <div className="border-r border-blue-900 p-2">Server: 5-3-1</div>
+              <div className="p-2 text-red-600 font-bold text-lg">{checkNumber}</div>
             </div>
-            <h1 className="text-5xl font-bold text-blue-900 text-center mb-2" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
-              GUEST CHECK
+            <h1 className="text-5xl text-blue-900 text-center mb-3" style={{ fontFamily: 'Georgia, serif', fontWeight: 'bold' }}>
+              Guest Check
             </h1>
-            <div className="grid grid-cols-3 gap-2 text-xs text-blue-900">
-              <span>CHECK #{checkNumber}</span>
-              <span className="text-center">GUESTS: 1</span>
-              <span className="text-right">DATE: {new Date().toLocaleDateString()}</span>
+            <div className="grid grid-cols-5 gap-2 text-xs text-blue-900 border-2 border-blue-900 font-medium">
+              <div className="border-r border-blue-900 p-2">Date: 12/15/24</div>
+              <div className="border-r border-blue-900 p-2">Table: 1</div>
+              <div className="border-r border-blue-900 p-2">Guests: 1</div>
+              <div className="border-r border-blue-900 p-2">Server: 5-3-1</div>
+              <div className="p-2 text-red-600 font-bold text-lg">{checkNumber}</div>
             </div>
           </div>
 
@@ -174,25 +178,27 @@ function FilterPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-semibold text-blue-900 mb-2">
-                YOUR LOCATION
+              <label className="block text-sm font-bold text-blue-900 mb-2 uppercase text-left">
+                TABLE LOCATION:
               </label>
-              <div className="space-y-2">
-                <LocationSearch
-                  searchLocation={searchLocation}
-                  setSearchLocation={setSearchLocation}
-                  setUseCurrLocation={setUseCurrLocation}
-                  formattedAddress={formattedAddress}
-                  setFormattedAddress={setFormattedAddress}
-                  selectedPlace={selectedPlace}
-                  setSelectedPlace={setSelectedPlace}
-                />
-                <CurrentLocationButton setCurrLocation={setCurrLocation} setUseCurrLocation={setUseCurrLocation} useCurrLocation={useCurrLocation} setFormattedAddress={setFormattedAddress} />
+              <div className="flex gap-2 items-start">
+                <div className="flex-1">
+                  <LocationSearch
+                    searchLocation={searchLocation}
+                    setSearchLocation={setSearchLocation}
+                    setUseCurrLocation={setUseCurrLocation}
+                    formattedAddress={formattedAddress}
+                    setFormattedAddress={setFormattedAddress}
+                    selectedPlace={selectedPlace}
+                    setSelectedPlace={setSelectedPlace}
+                  />
+                </div>
+                <CurrentLocationButton setCurrLocation={setCurrLocation} setUseCurrLocation={setUseCurrLocation} useCurrLocation={useCurrLocation} setFormattedAddress={setFormattedAddress} setSelectedPlace={setSelectedPlace} />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-blue-900 mb-2">
+              <label className="block text-sm font-bold text-blue-900 mb-2 uppercase text-left">
                 SEARCH RADIUS: {radiusMiles.toFixed(1)} miles
               </label>
               <input
@@ -207,11 +213,12 @@ function FilterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-blue-900 mb-2">
+              <label className="block text-sm font-bold text-blue-900 mb-2 uppercase text-left">
                 CUISINE TYPE
               </label>
               <select
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                className="w-full px-4 py-3 border-2 border-blue-900 focus:ring-2 focus:ring-blue-900 focus:border-blue-900"
+                style={{ fontFamily: '"Courier New", monospace', borderRadius: '0' }}
                 value={cuisineType}
                 onChange={(e) => setCuisineType(e.target.value)}
               >
@@ -225,23 +232,65 @@ function FilterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-blue-900 mb-2">
-                MAX PRICE: {'$'.repeat(maxPrice)}
+              <label className="block text-sm font-bold text-blue-900 mb-2 uppercase text-left">
+                MAX PRICE:
               </label>
-              <input
-                type="range"
-                min="1"
-                max="4"
-                step="1"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-900"
-              />
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
-                <span>$</span>
-                <span>$$</span>
-                <span>$$$</span>
-                <span>$$$$</span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setMaxPrice(0)}
+                  className={`flex-1 py-2 border-2 border-blue-900 font-bold transition-colors ${
+                    maxPrice === 0
+                      ? 'bg-blue-900 text-white'
+                      : 'bg-white text-blue-900 hover:bg-gray-100'
+                  }`}
+                >
+                  ANY
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMaxPrice(1)}
+                  className={`flex-1 py-2 border-2 border-blue-900 font-bold transition-colors ${
+                    maxPrice === 1
+                      ? 'bg-blue-900 text-white'
+                      : 'bg-white text-blue-900 hover:bg-gray-100'
+                  }`}
+                >
+                  $
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMaxPrice(2)}
+                  className={`flex-1 py-2 border-2 border-blue-900 font-bold transition-colors ${
+                    maxPrice === 2
+                      ? 'bg-blue-900 text-white'
+                      : 'bg-white text-blue-900 hover:bg-gray-100'
+                  }`}
+                >
+                  $$
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMaxPrice(3)}
+                  className={`flex-1 py-2 border-2 border-blue-900 font-bold transition-colors ${
+                    maxPrice === 3
+                      ? 'bg-blue-900 text-white'
+                      : 'bg-white text-blue-900 hover:bg-gray-100'
+                  }`}
+                >
+                  $$$
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMaxPrice(4)}
+                  className={`flex-1 py-2 border-2 border-blue-900 font-bold transition-colors ${
+                    maxPrice === 4
+                      ? 'bg-blue-900 text-white'
+                      : 'bg-white text-blue-900 hover:bg-gray-100'
+                  }`}
+                >
+                  $$$$
+                </button>
               </div>
             </div>
 
@@ -273,7 +322,7 @@ function FilterPage() {
                   : 'bg-blue-900 text-white hover:bg-blue-800'
               }`}
             >
-              {isLoading ? 'Loading...' : 'Find 5 Restaurants'}
+              {isLoading ? 'Loading...' : '[ FIND 5 RESTAURANTS ]'}
             </button>
           </form>
 
@@ -286,8 +335,8 @@ function FilterPage() {
           </div>
 
           {/* Guest Check Footer */}
-          <div className="border-t-4 border-blue-900 p-4 text-center bg-green-50">
-            <p className="text-sm text-blue-900 font-semibold">THANK YOU - PLEASE COME AGAIN</p>
+          <div className="border-t-2 border-blue-900 p-3 text-center bg-green-50">
+            <p className="text-xs text-gray-600">Thank you for your indecision!</p>
           </div>
         </div>
       </div>
@@ -297,22 +346,29 @@ function FilterPage() {
   // Step 1: Select 3 from 5
   if (!chosenRestaurant && restaurants.length > 0) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-8">
-        <div className="max-w-4xl w-full bg-green-50 border-l-4 border-r-4 border-blue-900 shadow-2xl">
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-8">
+        <div className="max-w-2xl w-full bg-white border-2 border-blue-900 shadow-2xl">
           {/* Guest Check Header */}
-          <div className="border-b-4 border-blue-900 p-4 bg-green-50">
-            <div className="grid grid-cols-3 gap-2 text-xs text-blue-900 mb-2">
-              <span>CHECK #{checkNumber}</span>
-              <span className="text-center">TABLE 1</span>
-              <span className="text-right">SERVER: 5-3-1</span>
+          <div className="border-b-2 border-blue-900 p-3 bg-white">
+            <div className="grid grid-cols-5 gap-2 text-xs text-blue-900 border-2 border-blue-900 mb-3 font-medium">
+              <div className="border-r border-blue-900 p-2">Date: 12/15/24</div>
+              <div className="border-r border-blue-900 p-2">Amount: $$$</div>
+              <div className="border-r border-blue-900 p-2">Guests: 1</div>
+              <div className="border-r border-blue-900 p-2">Server: 5-3-1</div>
+              <div className="p-2 text-red-600 font-bold text-lg">{checkNumber}</div>
             </div>
-            <h1 className="text-4xl font-bold text-blue-900 text-center mb-2" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
-              SELECT YOUR TOP 3
+            <h1 className="text-5xl text-blue-900 text-center mb-3" style={{ fontFamily: 'Georgia, serif', fontWeight: 'bold' }}>
+              Guest Check
             </h1>
-            <div className="grid grid-cols-3 gap-2 text-xs text-blue-900">
-              <span>ITEMS: 5</span>
-              <span className="text-center">SELECTED: {selectedRestaurants.length}/3</span>
-              <span className="text-right">DATE: {new Date().toLocaleDateString()}</span>
+            <div className="grid grid-cols-5 gap-2 text-xs text-blue-900 border-2 border-blue-900 mb-2 font-medium">
+              <div className="border-r border-blue-900 p-2">Date: 12/15/24</div>
+              <div className="border-r border-blue-900 p-2">Table: 1</div>
+              <div className="border-r border-blue-900 p-2">Guests: 1</div>
+              <div className="border-r border-blue-900 p-2">Server: 5-3-1</div>
+              <div className="p-2 text-red-600 font-bold text-lg">{checkNumber}</div>
+            </div>
+            <div className="text-xs text-blue-900 font-semibold py-1 border-t border-blue-900">
+              SELECTED: {selectedRestaurants.length}/3
             </div>
           </div>
 
@@ -323,13 +379,19 @@ function FilterPage() {
             </div>
           )}
 
-          <div className="space-y-3 mb-6">
-            {restaurants.map((restaurant) => (
+          <div className="mb-6 relative">
+            {/* Continuous vertical lines */}
+            <div className="absolute left-[80px] top-0 bottom-0 w-[2px] bg-blue-900 pointer-events-none"></div>
+            <div className="absolute right-[140px] top-0 bottom-0 w-[2px] bg-blue-900 pointer-events-none"></div>
+            <div className="absolute right-[60px] top-0 bottom-0 w-[2px] bg-blue-900 pointer-events-none"></div>
+
+            {restaurants.map((restaurant, index) => (
               <RestaurantCard
                 key={restaurant.id}
                 restaurant={restaurant}
                 isSelected={selectedRestaurants.includes(restaurant.id)}
                 onSelect={handleSelectRestaurant}
+                isLast={index === restaurants.length - 1}
               />
             ))}
           </div>
@@ -338,28 +400,28 @@ function FilterPage() {
             <div className="flex gap-4 justify-center mb-4">
               <button
                 onClick={reset}
-                className="px-8 py-3 bg-white border-2 border-blue-900 text-blue-900 font-semibold hover:bg-blue-50 transition-colors"
+                className="px-8 py-3 bg-white border-2 border-blue-900 text-blue-900 font-semibold hover:bg-blue-50 transition-colors flex items-center"
               >
-                Start Over
+                [ VOID ]
               </button>
               <button
                 onClick={submitSelection}
                 disabled={selectedRestaurants.length !== 3}
-                className={`px-8 py-3 font-semibold transition-all ${
+                className={`px-8 py-3 font-semibold transition-all flex items-center ${
                   selectedRestaurants.length === 3
                     ? 'bg-blue-900 text-white hover:bg-blue-800'
                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                 }`}
               >
-                Pick My Restaurant!
+                [ SETTLE CHECK ]
               </button>
             </div>
           </div>
           </div>
 
           {/* Guest Check Footer */}
-          <div className="border-t-4 border-blue-900 p-4 text-center bg-green-50">
-            <p className="text-sm text-blue-900 font-semibold">THANK YOU - PLEASE COME AGAIN</p>
+          <div className="border-t-2 border-blue-900 p-3 text-center bg-green-50">
+            <p className="text-xs text-gray-600">Thank you for your indecision!</p>
           </div>
         </div>
       </div>
@@ -369,27 +431,31 @@ function FilterPage() {
   // Step 2: Final Pick
   if (chosenRestaurant) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-8">
-        <div className="max-w-3xl w-full bg-green-50 border-l-4 border-r-4 border-blue-900 shadow-2xl relative">
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-8">
+        <div className="max-w-2xl w-full bg-white border-2 border-blue-900 shadow-2xl relative">
           {/* PAID Stamp */}
           <div className="absolute top-24 right-8 border-4 border-red-600 text-red-600 font-black text-4xl px-8 py-3 opacity-70 z-10" style={{ transform: 'rotate(-15deg)' }}>
             PAID
           </div>
 
           {/* Guest Check Header */}
-          <div className="border-b-4 border-blue-900 p-4 bg-green-50">
-            <div className="grid grid-cols-3 gap-2 text-xs text-blue-900 mb-2">
-              <span>CHECK #{checkNumber}</span>
-              <span className="text-center">TABLE 1</span>
-              <span className="text-right">SERVER: 5-3-1</span>
+          <div className="border-b-2 border-blue-900 p-3 bg-white">
+            <div className="grid grid-cols-5 gap-2 text-xs text-blue-900 border-2 border-blue-900 mb-3 font-medium">
+              <div className="border-r border-blue-900 p-2">Date: 12/15/24</div>
+              <div className="border-r border-blue-900 p-2">Amount: $$$</div>
+              <div className="border-r border-blue-900 p-2">Guests: 1</div>
+              <div className="border-r border-blue-900 p-2">Server: 5-3-1</div>
+              <div className="p-2 text-red-600 font-bold text-lg">{checkNumber}</div>
             </div>
-            <h1 className="text-4xl font-bold text-blue-900 text-center mb-2" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
-              YOUR SELECTION
+            <h1 className="text-5xl text-blue-900 text-center mb-3" style={{ fontFamily: 'Georgia, serif', fontWeight: 'bold' }}>
+              Guest Check
             </h1>
-            <div className="grid grid-cols-3 gap-2 text-xs text-blue-900">
-              <span>GUESTS: 1</span>
-              <span className="text-center">FINAL PICK</span>
-              <span className="text-right">DATE: {new Date().toLocaleDateString()}</span>
+            <div className="grid grid-cols-5 gap-2 text-xs text-blue-900 border-2 border-blue-900 font-medium">
+              <div className="border-r border-blue-900 p-2">Date: 12/15/24</div>
+              <div className="border-r border-blue-900 p-2">Table: 1</div>
+              <div className="border-r border-blue-900 p-2">Guests: 1</div>
+              <div className="border-r border-blue-900 p-2">Server: 5-3-1</div>
+              <div className="p-2 text-red-600 font-bold text-lg">{checkNumber}</div>
             </div>
           </div>
 
@@ -479,14 +545,14 @@ function FilterPage() {
                 onClick={reset}
                 className="w-full py-3 bg-blue-900 text-white font-semibold text-lg hover:bg-blue-800 transition-colors"
               >
-                Pick Again
+                [ NEW CHECK ]
               </button>
             </div>
           </div>
 
           {/* Guest Check Footer */}
-          <div className="border-t-4 border-blue-900 p-4 text-center">
-            <p className="text-sm text-blue-900 font-semibold">THANK YOU - PLEASE COME AGAIN</p>
+          <div className="border-t-2 border-blue-900 p-3 text-center bg-green-50">
+            <p className="text-xs text-gray-600">Thank you for your indecision!</p>
           </div>
         </div>
       </div>

@@ -70,10 +70,53 @@ const LocationSearch = ({ searchLocation, setSearchLocation, setUseCurrLocation,
           selectProps={{
             value: selectedPlace, // Set value of the input field
             onChange: handleLocationSelect, // Update location when a user selects an option
-            placeholder: formattedAddress || "Search for location (defaults to UIUC campus)", // Placeholder text
+            placeholder: formattedAddress || "Enter location", // Placeholder text
             isClearable: true,
             noOptionsMessage: () => "No places found",
             loadingMessage: () => "Loading places...",
+            styles: {
+              control: (provided) => ({
+                ...provided,
+                border: '2px solid #1e3a8a',
+                borderRadius: '0',
+                boxShadow: 'none',
+                minHeight: '48px',
+                '&:hover': {
+                  border: '2px solid #1e3a8a',
+                },
+              }),
+              valueContainer: (provided) => ({
+                ...provided,
+                padding: '2px 16px',
+              }),
+              input: (provided) => ({
+                ...provided,
+                fontFamily: '"Courier New", monospace',
+                textAlign: 'left',
+                margin: '0',
+                paddingLeft: '0',
+              }),
+              singleValue: (provided) => ({
+                ...provided,
+                fontFamily: '"Courier New", monospace',
+                textAlign: 'left',
+                color: 'rgb(21, 66, 40)',
+              }),
+              placeholder: (provided) => ({
+                ...provided,
+                fontFamily: '"Courier New", monospace',
+                textAlign: 'left',
+                marginLeft: '0',
+                color: 'rgb(107, 114, 128)',
+              }),
+              dropdownIndicator: (provided) => ({
+                ...provided,
+                color: 'rgb(21, 66, 40)',
+              }),
+              indicatorSeparator: () => ({
+                display: 'none',
+              }),
+            },
           }}
         />
         )}

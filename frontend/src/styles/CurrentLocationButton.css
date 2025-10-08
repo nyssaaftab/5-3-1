@@ -1,26 +1,36 @@
 /* CurrentLocationButton.css */
 .current-location-button {
-  background-color: white;  /* Default background color */
-  color: black;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
+  background-color: white;  /* White background */
+  color: #1e3a8a;  /* Navy blue icon */
+  padding: 0;
+  border: 2px solid #1e3a8a;
+  border-radius: 0;
   cursor: pointer;
-  margin-top: 10px;
-  margin-bottom: 7px;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
 .current-location-button:hover {
-  background-color: #f97316;  /* Orange hover */
-  color: white;
+  background-color: #f8fafc;  /* Very light gray on hover */
+  border-color: #1e3a8a;
 }
 
 .current-location-button.selected {
-  background-color: #f97316; /* Orange when selected */
-  font-weight: bold;  /* Optional: Make the text bold when selected */
-  color: white;
+  background-color: #1e3a8a; /* Navy blue when selected */
+  color: white;  /* White icon when selected */
+  border: 2px solid #1e3a8a;
 }
 
 .current-location-button.selected:hover {
-  background-color: #ea580c;  /* Darker orange when hovered */
+  background-color: #1e40af;  /* Slightly lighter navy when hovered */
+  border-color: #1e40af;
+}
+
+.current-location-button svg {
+  display: block;
 }

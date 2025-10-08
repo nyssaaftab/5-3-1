@@ -32,9 +32,11 @@
   .location-search input[type="text"] {
     background-color: #ffffff !important; /* Input background */
     color:  rgb(21, 66, 40) !important; /* Input text color */
-    border: 1px solid #ccc; /* Add a border */
-    border-radius: 5px; /* Rounded corners for input */
+    border: none !important; /* No border on input */
+    border-radius: 0 !important; /* Sharp corners */
     padding: 10px; /* Padding for better usability */
     width: 100%; /* Ensure full width */
+    font-family: "Courier New", monospace !important; /* Monospace font */
+    text-align: left !important; /* Left align text */
   }
 
