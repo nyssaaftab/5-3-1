@@ -1,5 +1,6 @@
 # 5-3-1 Restaurant Finder
 
+https://5-3-1.vercel.app/
 A decision-making app that helps users find restaurants when they can't decide, using a "5-3-1" selection process.
 
 ## Features
